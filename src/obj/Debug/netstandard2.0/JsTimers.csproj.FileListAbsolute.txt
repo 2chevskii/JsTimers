@@ -1,0 +1,7 @@
+C:\Users\2CHEVSKII\source\repos\JsTimers\bin\Debug\netstandard2.0\JsTimers.deps.json
+C:\Users\2CHEVSKII\source\repos\JsTimers\bin\Debug\netstandard2.0\JsTimers.dll
+C:\Users\2CHEVSKII\source\repos\JsTimers\bin\Debug\netstandard2.0\JsTimers.pdb
+C:\Users\2CHEVSKII\source\repos\JsTimers\src\obj\Debug\netstandard2.0\JsTimers.AssemblyInfoInputs.cache
+C:\Users\2CHEVSKII\source\repos\JsTimers\src\obj\Debug\netstandard2.0\JsTimers.AssemblyInfo.cs
+C:\Users\2CHEVSKII\source\repos\JsTimers\src\obj\Debug\netstandard2.0\JsTimers.dll
+C:\Users\2CHEVSKII\source\repos\JsTimers\src\obj\Debug\netstandard2.0\JsTimers.pdb

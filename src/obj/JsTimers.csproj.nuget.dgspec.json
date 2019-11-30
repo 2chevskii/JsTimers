@@ -1,0 +1,70 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\2CHEVSKII\\source\\repos\\JsTimers\\src\\JsTimers.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\2CHEVSKII\\source\\repos\\JsTimers\\src\\JsTimers.csproj": {
+      "version": "0.1.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\2CHEVSKII\\source\\repos\\JsTimers\\src\\JsTimers.csproj",
+        "projectName": "JsTimers",
+        "projectPath": "C:\\Users\\2CHEVSKII\\source\\repos\\JsTimers\\src\\JsTimers.csproj",
+        "packagesPath": "C:\\Users\\2CHEVSKII\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\2CHEVSKII\\source\\repos\\JsTimers\\src\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\2CHEVSKII\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "allWarningsAsErrors": true
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "dependencies": {
+            "Microsoft.CodeAnalysis.FxCopAnalyzers": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.9.8, )"
+            },
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
