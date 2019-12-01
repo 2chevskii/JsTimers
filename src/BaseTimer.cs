@@ -97,12 +97,12 @@ namespace JsTimers
 				return false;
 			}
 
+			timer.ReturnToPool();
+
 			if(executeCallback)
 			{
 				timer.ExecuteImmediate();
 			}
-
-			timer.ReturnToPool();
 
 			return true;
 		}
