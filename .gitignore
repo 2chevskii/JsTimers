@@ -1,4 +1,3 @@
 .vs
-./obj/
-./src/obj
-bin
+*obj/
+*bin/
