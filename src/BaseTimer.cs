@@ -30,7 +30,8 @@ namespace JsTimers
 		#region Public properties
 
 		public string CallbackName => _callback?.Method?.Name ?? string.Empty;
-		public bool InUse { get;protected set; }
+		public bool InUse { get; protected set; }
+		public uint ID => _id;
 
 		#endregion
 
@@ -44,7 +45,7 @@ namespace JsTimers
 			do
 			{
 				_id = (uint)generator.Next((int)uint.MinValue, int.MaxValue);
-			} while(pool.Any(t=>t._id==_id));
+			} while(pool.Any(t => t._id == _id));
 		}
 
 		~BaseTimer() => Dispose(false);
@@ -77,12 +78,14 @@ namespace JsTimers
 		#region Public library functions
 
 		public static BaseTimer SetTimeout(Action callback, uint timeoutMilliseconds) => TryGetFromPool<Timeout>().InitNew(callback, timeoutMilliseconds);
-		public static BaseTimer SetTimeout(Action callback, float timeoutSeconds) => SetTimeout(callback, Convert.ToUInt32(Math.Round(timeoutSeconds * 1000)));
+		public static BaseTimer SetTimeout(Action callback, float timeoutSeconds) => SetTimeout(callback, Convert.ToUInt32(timeoutSeconds * 1000));
 
-		public static BaseTimer SetInterval(Action callback, uint timeoutMilliseconds, bool executeImmediately=false) => TryGetFromPool<Interval>().InitNew(callback, timeoutMilliseconds, executeImmediately);
-		public static BaseTimer SetInterval(Action callback, float timeoutSeconds, bool executeImmediately=false) => TryGetFromPool<Interval>().InitNew(callback, Convert.ToUInt32(Math.Round(timeoutSeconds * 1000)), executeImmediately);
+		public static BaseTimer SetInterval(Action callback, uint timeoutMilliseconds, bool executeImmediately = false) 
+			=> TryGetFromPool<Interval>().InitNew(callback, timeoutMilliseconds, executeImmediately);
+		public static BaseTimer SetInterval(Action callback, float timeoutSeconds, bool executeImmediately = false) 
+			=> SetInterval(callback, Convert.ToUInt32(timeoutSeconds * 1000), executeImmediately);
 
-		public static bool ClearTimer(BaseTimer timer, bool executeCallback)
+		public static bool ClearTimer(BaseTimer timer, bool executeCallback = false)
 		{
 			if(timer is null)
 			{
@@ -143,7 +146,7 @@ namespace JsTimers
 		{
 			if(_callback is null)
 			{
-				throw new NullReferenceException("Trying to invoke null callback in timer with id: "+ _id);
+				throw new NullReferenceException("Trying to invoke null callback in timer with id: " + _id);
 			}
 			else
 			{

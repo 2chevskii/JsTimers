@@ -11,59 +11,55 @@ namespace JsTimers.Tests
 
 		public static void Main(string[] args)
 		{
-			Log("Starting test");
-			var random = new Random();
+			Log("Starting tests at " + DateTime.Now);
 
-			var rndMS = (uint)random.Next(0, 5000);
-			var rndS = (float)(random.NextDouble() * 5);
+			var msDelay = 2750u;
+			var sDelay = 2.75f;
+			DateTime dt = default(DateTime);
+			DateTime _dt = default(DateTime);
 
-			var rndCycles = random.Next(1, 3);
-
-			Log("Random ms: " + rndMS);
-			Log("Random sec: " + rndS);
-			Log("Random cycles: " + rndCycles);
-
-			var startTime = DateTime.Now;
-
-			double calculateDelay(DateTime now)
-			{
-				return (now - startTime).TotalMilliseconds;
-			}
-
-			Log("Start time: " + startTime);
-
-			var cycle1 = 1;
-			var cycle2 = 1;
+			Log("Desired delay - 2.75sec (2750ms)");
 
 			setTimeout(() =>
 			{
-				Log("Timeout 1 delay: " + calculateDelay(DateTime.Now));
-			}, rndMS);
+				var __dt = DateTime.Now;
+				var delay = (__dt - dt).TotalMilliseconds;
+				var var = Math.Abs(delay - msDelay);
+				Log("Finished milliseconds timeout test with " + delay + "ms delay, variation is " + var + $"ms, ({var / msDelay}%)");
+			}, msDelay);
+			dt = DateTime.Now;
 
 			setTimeout(() =>
 			{
-				Log("Timeout 2 delay: " + calculateDelay(DateTime.Now));
-			}, rndS);
+				var __dt = DateTime.Now;
+				var delay = (__dt - _dt).TotalSeconds;
+				var var = Math.Abs(delay - sDelay);
+				Log("Finished seconds timeout test with " + delay + "s delay, variation is " + var + $"s, ({var / sDelay}%)");
+			}, sDelay);
+			_dt = DateTime.Now;
 
+			var cycles = 0;
+			BaseTimer _int = null;
+			_int =
 			setInterval(() =>
 			{
-				Log($"Interval 1 cycle {cycle1++}: " + calculateDelay(DateTime.Now));
-			}, rndMS);
+				Log("Cycle " + ++cycles);
 
-			setInterval(() =>
-			{
-				if(cycle2 >=rndCycles && cycle1>=rndCycles)
+				if(cycles == 3)
 				{
-					Log("Test finished: " + DateTime.Now, true);
-					Environment.Exit(0);
+					clear(_int, true);
 				}
-				Log($"Interval 1 cycle {cycle2++}: " + calculateDelay(DateTime.Now));
-			},rndS);
+
+				if(cycles == 4)
+				{
+					Log("Interval test finished!", true);
+				}
+			}, msDelay, true);
 
 			Console.ReadKey();
 		}
 
-		private static void Log(string text,bool end=false)
+		private static void Log(string text, bool end = false)
 		{
 			builder.AppendLine(text);
 
@@ -72,13 +68,16 @@ namespace JsTimers.Tests
 			if(end)
 			{
 				File.WriteAllText(Path.Combine(Directory.GetCurrentDirectory(), "tests.log"), builder.ToString());
+				Environment.Exit(0);
 			}
 		}
 
 		private static BaseTimer setTimeout(Action callback, uint to) => BaseTimer.SetTimeout(callback, to);
 		private static BaseTimer setTimeout(Action callback, float to) => BaseTimer.SetTimeout(callback, to);
 
+		private static bool clear(BaseTimer timer, bool execCallback = false) => BaseTimer.ClearTimer(timer, execCallback);
+
 		private static BaseTimer setInterval(Action callback, uint to, bool execImmediately = false) => BaseTimer.SetInterval(callback, to, execImmediately);
-		private static BaseTimer setInterval(Action callback, float to, bool execImmediately = false) => BaseTimer.SetInterval(callback, to, execImmediately);
+		//private static BaseTimer setInterval(Action callback, float to, bool execImmediately = false) => BaseTimer.SetInterval(callback, to, execImmediately);
 	}
 }

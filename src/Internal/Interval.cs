@@ -8,12 +8,14 @@ namespace JsTimers.Internal
 
 		internal BaseTimer InitNew(Action callback, uint timeMS,bool executeImmediate)
 		{
+			var _this = InitNew(callback, timeMS);
+
 			if(executeImmediate)
 			{
 				ExecuteImmediate();
 			}
 
-			return InitNew(callback, timeMS);
+			return _this;
 		}
 	}
 }
