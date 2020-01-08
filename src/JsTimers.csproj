@@ -6,7 +6,13 @@
     <Authors>2CHEVSKII</Authors>
     <Company />
     <Description>JavaScript-style timers (SetTimeout, SetInterval)</Description>
-    <Copyright>MIT</Copyright>
+    <Copyright>© 2CHEVSKII 2019</Copyright>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <RepositoryUrl>https://github.com/2chevskii/JsTimers</RepositoryUrl>
+    <RepositoryType>github</RepositoryType>
+    <PackageTags>timer, lib, help, tool, util, timeout, javascript, typescript, nodejs</PackageTags>
+    <PackageProjectUrl>https://github.com/2chevskii/JsTimers</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
