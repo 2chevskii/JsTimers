@@ -1,4 +1,4 @@
-# JsTimers
+# JsTimers [![CodeFactor](https://www.codefactor.io/repository/github/2chevskii/jstimers/badge/master)](https://www.codefactor.io/repository/github/2chevskii/jstimers/overview/master)
 *Simple and easy-to-use library bringing JavaScript-style timers into .NET*
 
 ## Description
