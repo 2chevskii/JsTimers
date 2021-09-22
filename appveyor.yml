@@ -1,0 +1,10 @@
+version: 1.0.{build}
+configuration:
+- Release
+- Debug
+platform: Any CPU
+before_build:
+- sh: dotnet restore JsTimers.sln
+build:
+  project: JsTimers.sln
+  verbosity: normal
