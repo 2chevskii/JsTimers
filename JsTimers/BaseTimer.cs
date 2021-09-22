@@ -1,6 +1,4 @@
-﻿#pragma warning disable CA1051
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Timers;
 using System.Linq;
@@ -80,9 +78,9 @@ namespace JsTimers
 		public static BaseTimer SetTimeout(Action callback, uint timeoutMilliseconds) => TryGetFromPool<Timeout>().InitNew(callback, timeoutMilliseconds);
 		public static BaseTimer SetTimeout(Action callback, float timeoutSeconds) => SetTimeout(callback, Convert.ToUInt32(timeoutSeconds * 1000));
 
-		public static BaseTimer SetInterval(Action callback, uint timeoutMilliseconds, bool executeImmediately = false) 
+		public static BaseTimer SetInterval(Action callback, uint timeoutMilliseconds, bool executeImmediately = false)
 			=> TryGetFromPool<Interval>().InitNew(callback, timeoutMilliseconds, executeImmediately);
-		public static BaseTimer SetInterval(Action callback, float timeoutSeconds, bool executeImmediately = false) 
+		public static BaseTimer SetInterval(Action callback, float timeoutSeconds, bool executeImmediately = false)
 			=> SetInterval(callback, Convert.ToUInt32(timeoutSeconds * 1000), executeImmediately);
 
 		public static bool ClearTimer(BaseTimer timer, bool executeCallback = false)
@@ -173,5 +171,3 @@ namespace JsTimers
 		#endregion
 	}
 }
-
-#pragma warning restore CA1051
