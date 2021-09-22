@@ -1,10 +1,9 @@
 version: 1.0.{build}
-configuration:
-- Release
-- Debug
-platform: Any CPU
-before_build:
-- sh: dotnet restore JsTimers.sln
+image: Ubuntu2004
+build_script:
+  - pwsh: |
+      dotnet restore JsTimers.sln
+      dotnet build JsTimers.sln -c Release
 build:
   project: JsTimers.sln
   verbosity: normal
