@@ -6,7 +6,7 @@ build:
   project: JsTimers.sln
   verbosity: minimal
 after_build:
-  - cmd: msbuild -t:pack JsTimers.sln -property:Configuration=Release
+  - cmd: IF %CONFIGURATION%==Release (msbuild -t:pack JsTimers.sln -property:Configuration=Release)
 configuration:
   - Debug
   - Release
