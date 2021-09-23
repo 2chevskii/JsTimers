@@ -1,13 +1,13 @@
 version: 1.0.{build}-{branch}
 image: Visual Studio 2019
 install:
-  - cmd: IF %CONFIGURATION%==Release (msbuild -t:restore JsTimers/JsTimers.csproj) ELSE (msbuild -t:restore JsTimers.sln)
+  - cmd: msbuild -t:restore JsTimers.sln
 build:
   project: JsTimers.sln
   verbosity: minimal
   publish_nuget: true
 configuration:
   - Release
-artifacts:
-  - path: bin/Release/JsTimers.1.0.*.nupkg
-    name: JsTimers.1.0.$(APPVEYOR_BUILD_NUMBER)
+#artifacts:
+#  - path: bin/Release/JsTimers.1.0.*.nupkg
+#    name: JsTimers.1.0.$(appveyor_build_number)
