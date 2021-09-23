@@ -10,3 +10,19 @@ configuration:
   - Release
 artifacts:
   - path: JsTimers\bin\Release\netstandard2.0\JsTimers.dll
+deploy:
+- provider: GitHub
+  tag: JsTimers v$(appveyor_build_version)
+  auth_token:
+    secure: 6NC5njRDgZxwvNmpiVm0gPw9yFw4ff7hLFFMA53FTFFB0WtRiWSW+ekc+1A6IABr
+  artifact: /.*\.(nupkg|dll)/
+  prerelease: true
+  on:
+    branch: develop
+- provider: GitHub
+  tag: JsTimers v$(appveyor_build_version)
+  auth_token:
+    secure: 6NC5njRDgZxwvNmpiVm0gPw9yFw4ff7hLFFMA53FTFFB0WtRiWSW+ekc+1A6IABr
+  artifact: /.*\.(nupkg|dll)/
+  on:
+    branch: master

@@ -20,7 +20,6 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>DEBUG</DefineConstants>
-    <!--<OutputPath>$(SolutionDir)bin/Debug/</OutputPath>-->
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <ErrorReport>none</ErrorReport>
     <DebugType>pdbonly</DebugType>
@@ -28,7 +27,6 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <!--<OutputPath>$(SolutionDir)bin/Release/</OutputPath>-->
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <ErrorReport>none</ErrorReport>
     <DebugType>none</DebugType>
