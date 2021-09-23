@@ -8,6 +8,5 @@ build:
   publish_nuget: true
 configuration:
   - Release
-#artifacts:
-#  - path: bin/Release/JsTimers.1.0.*.nupkg
-#    name: JsTimers.1.0.$(appveyor_build_number)
+artifacts:
+  - path: JsTimers\bin\Release\netstandard2.0\JsTimers.dll
