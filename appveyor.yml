@@ -11,5 +11,5 @@ configuration:
   - Debug
   - Release
 artifacts:
-  - path: bin/Packages/JsTimers.1.0.*.nupkg
+  - path: bin/Release/JsTimers.1.0.*.nupkg
     name: JsTimers.1.0.$(APPVEYOR_BUILD_NUMBER)
