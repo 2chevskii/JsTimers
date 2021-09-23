@@ -12,7 +12,8 @@ install:
 build:
   project: JsTimers.sln
   verbosity: minimal
-  publish_nuget: true
+after_build:
+  - cmd: msbuild -t:pack JsTimers.sln -property:Configuration=Release
 configuration:
   - Debug
   - Release
