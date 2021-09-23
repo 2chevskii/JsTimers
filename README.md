@@ -115,3 +115,7 @@ static void Main(string[] args) {
 ```
 
 If you want to restore previously disabled `Ref` on timer, just call `Ref()` method again. Don't forget, that if timer has already been destroyed, it will not prevent application exit, if only you do not `Refresh()` `Timeout` (Therefore you cannot `Ref` destroyed `Immediate`)
+
+## Important
+
+Do not use this library to time execution of actions which require very high precision. Library runs internal loop and processes all active timers one by one, this might sometimes cause overhead of up to `30ms`, therefore it works fine in most cases when you build general purpose software, but if you want to build an atomic clock with that, I have bad news for you
