@@ -1,11 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Timers;
 
 namespace JsTimers
 {
-    public class Immediate : Timer
+    /// <summary>
+    /// Timer which is guaranteed to execute at most once.
+    /// Has higher execution preference than <see cref="Timeout"/>
+    /// </summary>
+    public sealed class Immediate : Timer
     {
         internal Immediate(Action callback) : base(callback, 0) { }
 

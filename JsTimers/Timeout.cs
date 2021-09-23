@@ -2,10 +2,16 @@
 
 namespace JsTimers
 {
-    public class Timeout : Timer
+    /// <summary>
+    /// Timer which can be ran one or multiple times and restarted on demand
+    /// </summary>
+    public sealed class Timeout : Timer
     {
         readonly bool _repeating;
 
+        /// <summary>
+        /// Indicates whether timer will be executed multiple times
+        /// </summary>
         public bool IsInterval => _repeating;
 
         internal Timeout(Action callback, int delay, bool repeating) : base(callback, delay)
@@ -13,6 +19,9 @@ namespace JsTimers
             _repeating = repeating;
         }
 
+        /// <summary>
+        /// Resets time left to next execution. If timer has been destroyed, it will be restarted
+        /// </summary>
         public void Refresh()
         {
             RefreshExecutionTime();

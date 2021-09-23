@@ -8,7 +8,7 @@ namespace JsTimers
         readonly Action           _callback;
         readonly int              _id;
 
-        internal long nextExecutionTime = 0;
+        internal long nextExecutionTime;
 
         protected volatile bool _destroyed;
         volatile           bool _isRef;
@@ -48,11 +48,11 @@ namespace JsTimers
         public int Id => _id;
 
         /// <summary>
-        /// Executes whenever an exception is thrown inside of the timer callback. Suppresses stderr throw if at least one subscriber is present
+        /// Fired whenever an exception is thrown inside of the timer callback. Suppresses stderr throw if at least one subscriber is present
         /// </summary>
         public event Action<Exception> OnError;
 
-        protected Timer(Action callback, int delay)
+        protected internal Timer(Action callback, int delay)
         {
             _delay = MillisecondsToTicks(delay);
             _callback = callback;
@@ -66,6 +66,8 @@ namespace JsTimers
         {
             return milliseconds * TimeSpan.TicksPerMillisecond;
         }
+
+        #region Public API
 
         /// <summary>
         /// Sets <see cref="HasRef" /> value to <see langword="true" />
@@ -115,6 +117,10 @@ namespace JsTimers
             return _isRef;
         }
 
+        #endregion
+
+        #region Internal API
+
         internal virtual void SafeExecute()
         {
             try
@@ -142,10 +148,12 @@ namespace JsTimers
             }
         }
 
-        protected void RefreshExecutionTime()
+        protected internal void RefreshExecutionTime()
         {
             nextExecutionTime = TimerManager.TicksNow + _delay;
         }
+
+        #endregion
 
         string BuildExceptionMessage(Exception e)
         {

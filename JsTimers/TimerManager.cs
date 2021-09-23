@@ -1,42 +1,42 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace JsTimers
 {
+    /// <summary>
+    /// Contains essential methods for managing timers
+    /// </summary>
     public static class TimerManager
     {
-        static volatile int lastId;
-        static volatile int refsCount;
+        static volatile int              lastId;
+        static volatile int              refsCount;
+        static volatile bool             isShuttingDown;
+        static          Queue<Immediate> NextTickQueue  = new Queue<Immediate>();
+        static          List<Timeout>    ActiveTimeouts = new List<Timeout>();
 
-        static Queue<Immediate> NextTickQueue = new Queue<Immediate>();
+        internal static long TicksNow => DateTime.Now.Ticks;
 
-        static List<Timeout> ActiveTimeouts = new List<Timeout>();
-
-        static AppDomain AppDomain;
-
-        public static long TicksNow => DateTime.Now.Ticks;
-
+        /// <summary>
+        /// Intercepts exceptions thrown in all timers' callbacks. Suppresses stderr throw if at least one subscriber is present
+        /// </summary>
         public static event Action<Timer, Exception> OnTimerError;
 
         static TimerManager()
         {
-            AppDomain = AppDomain.CurrentDomain;
-            AppDomain.ProcessExit += (_, __) => {
+            AppDomain.CurrentDomain.ProcessExit += (_, __) => {
                 while (refsCount != 0)
                 {
                     Thread.Sleep(1);
                 }
+
+                isShuttingDown = true;
             };
 
             Task.Run(
                 () => {
-                    while (true)
+                    while (!isShuttingDown)
                     {
                         ProcessTick();
                         Thread.Sleep(2);
@@ -80,31 +80,7 @@ namespace JsTimers
         /// <returns></returns>
         public static Timeout SetTimeout(Action callback, float delay)
         {
-            return SetTimeout(callback, ConvertToMilliseconds(delay));
-        }
-
-        public static Timeout SetTimeout(object obj, string methodName, int delay, params object[] args)
-        {
-            var callback = GetCallbackFromInstanceMethod(obj, methodName, args);
-
-            return SetTimeout(callback, delay);
-        }
-
-        public static Timeout SetTimeout(Type type, string methodName, int delay, params object[] args)
-        {
-            var callback = GetCallbackFromStaticMethod(type, methodName, args);
-
-            return SetTimeout(callback, delay);
-        }
-
-        public static Timeout SetTimeout(object obj, string methodName, float delay, params object[] args)
-        {
-            return SetTimeout(obj, methodName, ConvertToMilliseconds(delay), args);
-        }
-
-        public static Timeout SetTimeout(Type type, string methodName, float delay, params object[] args)
-        {
-            return SetTimeout(type, methodName, ConvertToMilliseconds(delay), args);
+            return SetTimeout(callback, Utility.SecondsToMilliseconds(delay));
         }
 
         /// <summary>
@@ -133,7 +109,7 @@ namespace JsTimers
         /// <returns></returns>
         public static Timeout SetInterval(Action callback, float interval)
         {
-            return SetInterval(callback, ConvertToMilliseconds(interval));
+            return SetInterval(callback, Utility.SecondsToMilliseconds(interval));
         }
 
         /// <summary>
@@ -154,20 +130,6 @@ namespace JsTimers
                 NextTickQueue.Enqueue(immediate);
             }
             return immediate;
-        }
-
-        public static Immediate SetImmediate(object obj, string methodName, params object[] args)
-        {
-            var callback = GetCallbackFromInstanceMethod(obj, methodName, args);
-
-            return SetImmediate(callback);
-        }
-
-        public static Immediate SetImmediate(Type type, string methodName, params object[] args)
-        {
-            var callback = GetCallbackFromStaticMethod(type, methodName, args);
-
-            return SetImmediate(callback);
         }
 
         /// <summary>
@@ -259,91 +221,6 @@ namespace JsTimers
             timer.DestroyNow();
         }
 
-        static Action GetCallbackFromStaticMethod(Type type, string methodName, object[] args)
-        {
-            if (type is null)
-            {
-                throw new ArgumentNullException(nameof(type), "Target object cannot be null");
-            }
-
-            if (string.IsNullOrWhiteSpace(methodName))
-            {
-                throw new ArgumentException($"'{methodName ?? "null"}' is not a valid method identifier");
-            }
-
-            var methodInfo = type.GetMethod(
-                methodName,
-                BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic
-            );
-
-            if (methodInfo is null)
-            {
-                throw new InvalidOperationException($"Method '{methodName}' was not found in type {type.Name}");
-            }
-
-            return BuildCallback(methodInfo, args);
-        }
-
-        static Action GetCallbackFromInstanceMethod(object obj, string methodName, object[] args)
-        {
-            if (obj is null)
-            {
-                throw new ArgumentNullException(nameof(obj), "Target object cannot be null");
-            }
-
-            if (string.IsNullOrWhiteSpace(methodName))
-            {
-                throw new ArgumentException($"'{methodName ?? "null"}' is not a valid method identifier");
-            }
-
-            var type = obj.GetType();
-
-            var methodInfo = type.GetMethod(
-                methodName,
-                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
-            );
-
-            if (methodInfo is null)
-            {
-                throw new InvalidOperationException($"Method '{methodName}' was not found in type {type.Name}");
-            }
-
-            var aargs = new object[args.Length + 1];
-            aargs[0] = obj;
-            args.CopyTo(aargs, 1);
-
-            return BuildCallback(methodInfo, aargs);
-        }
-
-        static Action BuildCallback(MethodInfo methodInfo, params object[] args)
-        {
-            if (methodInfo.IsStatic)
-            {
-                return () => {
-                    methodInfo.Invoke(null, args);
-                };
-            }
-
-            if (args.Length == 1)
-            {
-                return () => {
-                    methodInfo.Invoke(args[0], Array.Empty<object>());
-                };
-            }
-
-            var obj = args[0];
-            var remainingArgs = new object[args.Length - 1];
-
-            for (var i = 1; i < args.Length; i++)
-            {
-                remainingArgs[i - 1] = args[i];
-            }
-
-            return () => {
-                methodInfo.Invoke(obj, remainingArgs);
-            };
-        }
-
         static void ProcessTick()
         {
             lock (NextTickQueue)
@@ -374,11 +251,6 @@ namespace JsTimers
                     timeout.SafeExecute();
                 }
             }
-        }
-
-        static int ConvertToMilliseconds(float seconds)
-        {
-            return (int)(seconds * 1000);
         }
     }
 }

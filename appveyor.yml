@@ -6,9 +6,9 @@ build:
   project: JsTimers.sln
   verbosity: minimal
 after_build:
-  - cmd: IF %CONFIGURATION%==Release (msbuild -t:pack JsTimers.sln -property:Configuration=Release)
+  - cmd: IF %CONFIGURATION%==Release (setx ARTIFACT_PATH="bin/Release/JsTimers.1.0.{build}.nupkg")
 configuration:
   - Debug
   - Release
 artifacts:
-  - path: bin/Release/*.nupkg
+  - path: $(ARTIFACT_PATH)
