@@ -1,4 +1,4 @@
-# JsTimers [![CodeFactor](https://www.codefactor.io/repository/github/2chevskii/jstimers/badge)](https://www.codefactor.io/repository/github/2chevskii/jstimers) [![Build status](https://ci.appveyor.com/api/projects/status/sbvtwbsx4qlg0h5l/branch/master?svg=true)](https://ci.appveyor.com/project/2chevskii/jstimers/branch/master)
+# JsTimers [![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/2chevskii/jstimers/master)](https://www.codefactor.io/repository/github/2chevskii/jstimers) [![Build status](https://ci.appveyor.com/api/projects/status/sbvtwbsx4qlg0h5l/branch/master?svg=true)](https://ci.appveyor.com/project/2chevskii/jstimers/branch/master)
 
 > JavaScript-style timers for .NET
 
