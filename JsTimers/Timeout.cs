@@ -6,6 +6,8 @@ namespace JsTimers
     {
         readonly bool _repeating;
 
+        public bool IsInterval => _repeating;
+
         internal Timeout(Action callback, int delay, bool repeating) : base(callback, delay)
         {
             _repeating = repeating;
@@ -28,6 +30,10 @@ namespace JsTimers
             if (!_repeating)
             {
                 Destroyed = true;
+            }
+            else
+            {
+                RefreshExecutionTime();
             }
         }
     }

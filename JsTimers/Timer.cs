@@ -1,60 +1,58 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading;
 
 namespace JsTimers
 {
     public abstract class Timer
     {
-        static volatile int lastId;
-
-        readonly long                 _delay;
-        readonly Action              _callback;
-        readonly int                 _id;
-
-        volatile bool             _isRef;
-        ManualResetEvent _resetEvent;
+        readonly long             _delay;
+        readonly Action           _callback;
+        readonly int              _id;
 
         internal long nextExecutionTime = 0;
-        internal bool _destroyed;
+
+        protected volatile bool _destroyed;
+        volatile           bool _isRef;
 
         public bool Destroyed
         {
             get => _destroyed;
             protected set
             {
+                if (_destroyed == value)
+                {
+                    return;
+                }
+
                 _destroyed = value;
 
-                if (!value && _isRef)
+                if (_isRef)
                 {
-                    _resetEvent.Reset();
-                }
-                else
-                {
-                    _resetEvent.Set();
+                    if (_destroyed)
+                    {
+                        TimerManager.UnRefMe(this);
+                    }
+                    else
+                    {
+                        TimerManager.RefMe(this);
+                    }
                 }
             }
         }
 
-        public static event Action<Timer, Exception> OnTimerError;
+        public int Id => _id;
+
         public event Action<Exception> OnError;
 
         protected Timer(Action callback, int delay)
         {
             _delay = MillisecondsToTicks(delay);
             _callback = callback;
-            _id = GetId();
+            _id = TimerManager.GetId();
+
+            Ref();
             RefreshExecutionTime();
-            _resetEvent = new ManualResetEvent(false); // FIXME
-
-            AppDomain.CurrentDomain.ProcessExit += (_, __) => {
-                _resetEvent.WaitOne();
-            };
-        }
-
-        static int GetId()
-        {
-            lastId = lastId + 1;
-            return lastId;
         }
 
         static long MillisecondsToTicks(int milliseconds)
@@ -64,34 +62,37 @@ namespace JsTimers
 
         public void Ref()
         {
-            if (_destroyed)
+            if (_isRef)
             {
                 return;
             }
 
             _isRef = true;
-            _resetEvent.Reset();
+
+            if (!_destroyed)
+            {
+                TimerManager.RefMe(this);
+            }
         }
 
         public void UnRef()
         {
-            if (_destroyed)
+            if (!_isRef)
             {
                 return;
             }
 
             _isRef = false;
-            _resetEvent.Set();
+
+            if (!_destroyed)
+            {
+                TimerManager.UnRefMe(this);
+            }
         }
 
         public bool HasRef()
         {
             return _isRef;
-        }
-
-        protected void RefreshExecutionTime()
-        {
-            nextExecutionTime = TimerManager.TicksNow + _delay;
         }
 
         internal virtual void SafeExecute()
@@ -102,24 +103,28 @@ namespace JsTimers
             }
             catch (Exception e)
             {
-                bool shouldReport = true;
                 if (OnError != null)
                 {
                     OnError.Invoke(e);
-                    shouldReport = false;
                 }
-
-                if (OnTimerError != null)
-                {
-                    OnTimerError.Invoke(this, e);
-                    shouldReport = false;
-                }
-
-                if (shouldReport)
+                else if(!TimerManager.RaiseException(this, e))
                 {
                     Console.Error.WriteLine(BuildExceptionMessage(e));
                 }
             }
+        }
+
+        internal void DestroyNow()
+        {
+            if (!_destroyed)
+            {
+                Destroyed = true;
+            }
+        }
+
+        protected void RefreshExecutionTime()
+        {
+            nextExecutionTime = TimerManager.TicksNow + _delay;
         }
 
         string BuildExceptionMessage(Exception e)
