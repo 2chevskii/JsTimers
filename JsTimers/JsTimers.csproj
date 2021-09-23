@@ -39,6 +39,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <PackagePath></PackagePath>
     </None>
+    <None Include="../README.md">
+      <Pack>True</Pack>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
