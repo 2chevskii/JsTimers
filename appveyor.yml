@@ -6,10 +6,10 @@ build:
   project: JsTimers.sln
   verbosity: minimal
 after_build:
-  - cmd: IF %CONFIGURATION%==Release (msbuild -t:pack -property:Configuration=Release JsTimers/JsTimers.csproj)
+  - cmd: IF %CONFIGURATION%==Release (msbuild -t:pack -property:Configuration=Release JsTimers.sln)
 configuration:
   - Debug
   - Release
 artifacts:
-  - path: bin/Release/JsTimers.1.0.*.nupkg
-    name: JsTimers.1.0.%APPVEYOR_BUILD_NUMBER%
+  - path: bin/Packages/JsTimers.1.0.*.nupkg
+    name: JsTimers.1.0.$(APPVEYOR_BUILD_NUMBER)

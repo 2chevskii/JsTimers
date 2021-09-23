@@ -33,6 +33,7 @@
     <ErrorReport>none</ErrorReport>
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
+    <PackageOutputDir>$(SolutionDir)bin/Packages/</PackageOutputDir>
   </PropertyGroup>
 
   <ItemGroup>
