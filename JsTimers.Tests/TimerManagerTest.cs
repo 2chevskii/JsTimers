@@ -58,5 +58,54 @@ namespace JsTimers.Tests
             Assert.IsFalse(interval.HasRef());
             Assert.IsTrue(msPassed >= 900 && msPassed <= 1000);
         }
+
+        [TestMethod]
+        public void SetImmediateTest()
+        {
+            bool fired = false;
+
+            TimerManager.SetImmediate(
+                () =>
+                {
+                    fired = true;
+                }
+            );
+
+            Thread.Sleep(50);
+            Assert.IsTrue(fired);
+        }
+
+        [TestMethod]
+        public void ClearTimeoutTest()
+        {
+            bool fired = false;
+            var timeout = TimerManager.SetTimeout(() => fired = true, 0);
+
+            TimerManager.ClearTimeout(timeout);
+            Thread.Sleep(50);
+            Assert.IsFalse(fired);
+        }
+
+        [TestMethod]
+        public void ClearIntervalTest()
+        {
+            bool fired = false;
+            var timeout = TimerManager.SetInterval(() => fired = true, 0);
+
+            TimerManager.ClearInterval(timeout);
+            Thread.Sleep(50);
+            Assert.IsFalse(fired);
+        }
+
+        [TestMethod]
+        public void ClearImmediateTest()
+        {
+            bool fired = false;
+            var timeout = TimerManager.SetImmediate(() => fired = true);
+
+            TimerManager.ClearImmediate(timeout);
+            Thread.Sleep(50);
+            Assert.IsFalse(fired);
+        }
     }
 }
