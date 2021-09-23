@@ -1,12 +1,12 @@
 version: 1.0.{build}-{branch}
 image: Visual Studio 2019
 install:
-  - cmd: msbuild -t:restore JsTimers.sln
+  - cmd: IF %CONFIGURATION%==Release (msbuild -t:restore JsTimers/JsTimers.csproj) ELSE (msbuild -t:restore JsTimers.sln)
 build:
   project: JsTimers.sln
   verbosity: minimal
 after_build:
-  - cmd: IF %CONFIGURATION%==Release (msbuild -t:pack -property:Configuration=Release JsTimers.sln)
+  - cmd: IF %CONFIGURATION%==Release (msbuild -t:pack -property:Configuration=Release JsTimers/JsTimers.csproj)
 configuration:
   - Debug
   - Release
