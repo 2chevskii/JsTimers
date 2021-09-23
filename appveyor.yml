@@ -1,12 +1,5 @@
 version: 1.0.{build}-{branch}
 image: Visual Studio 2019
-skip_commits:
-  files:
-    - '**/*.yml'
-    - '**/*.editorconfig'
-    - '**/*.gitignore'
-    - '**/LICENSE'
-    - '**/*.md'
 install:
   - cmd: msbuild -t:restore JsTimers.sln
 build:
@@ -17,3 +10,5 @@ after_build:
 configuration:
   - Debug
   - Release
+artifacts:
+  - path: bin/Release/JsTimers.{version}.nupkg
