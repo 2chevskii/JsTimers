@@ -135,7 +135,10 @@ namespace JsTimers
                 }
                 else if(!TimerManager.RaiseException(this, e))
                 {
+                    var defaultColor = Console.ForegroundColor;
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.Error.WriteLine(BuildExceptionMessage(e));
+                    Console.ForegroundColor = defaultColor;
                 }
             }
         }
