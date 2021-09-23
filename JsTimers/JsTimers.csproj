@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>1.0.0</Version>
+    <Version Condition="'$(CI)' == 'True'">1.0.$(APPVEYOR_BUILD_NUMBER)</Version>
+    <Version Condition="'$(Version)' == ''">1.0.0</Version>
     <Authors>2CHEVSKII</Authors>
     <Description>JavaScript-like timer API for .NET</Description>
     <Copyright>Copyright (c) 2019-2021 2CHEVSKII</Copyright>
@@ -13,6 +14,8 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>timers;api;utility</PackageTags>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <AssemblyVersion>$(Version).0</AssemblyVersion>
+    <FileVersion>$(Version).0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

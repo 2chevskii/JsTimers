@@ -11,4 +11,4 @@ configuration:
   - Debug
   - Release
 artifacts:
-  - path: bin/Release/JsTimers.{version}.nupkg
+  - path: bin/Release/*.nupkg
