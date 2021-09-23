@@ -5,7 +5,12 @@ VisualStudioVersion = 16.0.29324.140
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JsTimers", "JsTimers\JsTimers.csproj", "{B56FBFA6-97D3-4275-9E32-BABD76A141BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsTimers.Tests.ConsoleApp", "JsTimers.Tests.ConsoleApp\JsTimers.Tests.ConsoleApp.csproj", "{E7BB75BA-1184-4862-8E89-3661C7F3E597}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JsTimers.Tests.ConsoleApp", "JsTimers.Tests.ConsoleApp\JsTimers.Tests.ConsoleApp.csproj", "{E7BB75BA-1184-4862-8E89-3661C7F3E597}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FCE46D33-E2D6-4A13-AAF0-48A7D248C4AF}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
