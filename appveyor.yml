@@ -11,7 +11,8 @@ install:
   - cmd: msbuild -t:restore JsTimers.sln
 build:
   project: JsTimers.sln
-  verbosity: normal
+  verbosity: minimal
+  publish_nuget: true
 configuration:
   - Debug
   - Release
