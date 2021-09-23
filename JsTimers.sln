@@ -5,13 +5,13 @@ VisualStudioVersion = 16.0.29324.140
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JsTimers", "JsTimers\JsTimers.csproj", "{B56FBFA6-97D3-4275-9E32-BABD76A141BB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JsTimers.Tests.ConsoleApp", "JsTimers.Tests.ConsoleApp\JsTimers.Tests.ConsoleApp.csproj", "{E7BB75BA-1184-4862-8E89-3661C7F3E597}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FCE46D33-E2D6-4A13-AAF0-48A7D248C4AF}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		appveyor.yml = appveyor.yml
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsTimers.Tests", "JsTimers.Tests\JsTimers.Tests.csproj", "{29646D47-12B4-481B-8E36-EBF35A0515AE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{B56FBFA6-97D3-4275-9E32-BABD76A141BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B56FBFA6-97D3-4275-9E32-BABD76A141BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B56FBFA6-97D3-4275-9E32-BABD76A141BB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E7BB75BA-1184-4862-8E89-3661C7F3E597}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E7BB75BA-1184-4862-8E89-3661C7F3E597}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E7BB75BA-1184-4862-8E89-3661C7F3E597}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E7BB75BA-1184-4862-8E89-3661C7F3E597}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29646D47-12B4-481B-8E36-EBF35A0515AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29646D47-12B4-481B-8E36-EBF35A0515AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29646D47-12B4-481B-8E36-EBF35A0515AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29646D47-12B4-481B-8E36-EBF35A0515AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
