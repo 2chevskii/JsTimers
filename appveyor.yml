@@ -6,7 +6,7 @@ build:
   project: JsTimers.sln
   verbosity: minimal
 after_build:
-  - cmd: IF %CONFIGURATION%==Release (setx ARTIFACT_PATH="bin/Release/JsTimers.1.0.{build}.nupkg")
+  - cmd: IF %CONFIGURATION%==Release (setx ARTIFACT_PATH "bin/Release/JsTimers.1.0.%APPVEYOR_BUILD_NUMBER%.nupkg")
 configuration:
   - Debug
   - Release
