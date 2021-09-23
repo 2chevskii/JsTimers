@@ -103,7 +103,7 @@ var timeout2 = SetTimeout(() => {
 
 ### `Ref`/`UnRef` methods
 
-All timers will by default prevent your application from exiting until destroyed, but there are a way to explicitly tell them not to
+All timers will by default prevent your application from exiting until destroyed, but there is a way to explicitly tell them not to
 
 ```cs
 static void Main(string[] args) {
