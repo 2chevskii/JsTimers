@@ -1,29 +1,124 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Timers;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace JsTimers
 {
+    /// <summary>
+    /// Contains essential methods for managing timers
+    /// </summary>
     public static class TimerManager
     {
-        readonly static object              sync = new object();
-        static          System.Timers.Timer Timer;
+        static volatile int lastId;
+        static volatile int refsCount;
+        static volatile bool isShuttingDown;
+        static Queue<Immediate> NextTickQueue = new Queue<Immediate>();
+        static List<Timeout> ActiveTimeouts = new List<Timeout>();
 
-        static long elapsedTicks;
+        internal static long TicksNow => DateTime.Now.Ticks;
 
-        static Queue<Immediate>     NextTickQueue = new Queue<Immediate>();
-        static List<Timeout>        Timeouts      = new List<Timeout>();
-
-        public static event Action<Exception> OnError;
+        /// <summary>
+        /// Intercepts exceptions thrown in all timers' callbacks. Suppresses stderr throw if at least one subscriber is present
+        /// </summary>
+        public static event Action<Timer, Exception> OnTimerError;
 
         static TimerManager()
         {
-            Timer = new System.Timers.Timer();
-            Timer.Interval = 1d;
-            Timer.AutoReset = true;
-            Timer.Elapsed += OnTick;
+            AppDomain.CurrentDomain.ProcessExit += (_, __) =>
+            {
+                while (refsCount != 0)
+                {
+                    Thread.Sleep(1);
+                }
+
+                isShuttingDown = true;
+            };
+
+            Task.Run(
+                () =>
+                {
+                    while (!isShuttingDown)
+                    {
+                        ProcessTick();
+                        Thread.Sleep(2);
+                    }
+                }
+            );
         }
 
+        #region Public API
+
+        /// <summary>
+        /// Sets a timer which executes <paramref name="callback"/> after <paramref name="delay"/> milliseconds
+        /// </summary>
+        /// <param name="callback">Action to execute after <paramref name="delay"/> has passed</param>
+        /// <param name="delay">Delay in milliseconds</param>
+        /// <returns></returns>
+        public static Timeout SetTimeout(Action callback, int delay)
+        {
+            if (callback is null)
+            {
+                throw new ArgumentNullException(nameof(callback), "Callback must be a function. Received null");
+            }
+
+            if (delay < 0)
+            {
+                DebugLogger.LogWarning("Creating timeout with delay < 0 is not possible. It will be set to 0");
+
+                delay = 0;
+            }
+
+            var timeout = new Timeout(callback, delay, false);
+            ActiveTimeouts.Add(timeout);
+            return timeout;
+        }
+
+        /// <summary>
+        /// Sets a timer which executes <paramref name="callback"/> after <paramref name="delay"/> seconds
+        /// </summary>
+        /// <param name="callback">Action to execute after <paramref name="delay"/> has passed</param>
+        /// <param name="delay">Delay in seconds</param>
+        /// <returns></returns>
+        public static Timeout SetTimeout(Action callback, float delay)
+        {
+            return SetTimeout(callback, Utility.SecondsToMilliseconds(delay));
+        }
+
+        /// <summary>
+        /// Sets timer which repeatedly executes <paramref name="callback"/> every <paramref name="interval"/> milliseconds
+        /// </summary>
+        /// <param name="callback">Action to execute every time <paramref name="interval"/> has passed</param>
+        /// <param name="interval">Interval in milliseconds</param>
+        /// <returns></returns>
+        public static Timeout SetInterval(Action callback, int interval)
+        {
+            if (callback is null)
+            {
+                throw new ArgumentNullException(nameof(callback), "Callback must be a function. Received null");
+            }
+
+            var timeout = new Timeout(callback, interval, true);
+            ActiveTimeouts.Add(timeout);
+            return timeout;
+        }
+
+        /// <summary>
+        /// Sets timer which repeatedly executes <paramref name="callback"/> every <paramref name="interval"/> seconds
+        /// </summary>
+        /// <param name="callback">Action to execute every time <paramref name="interval"/> has passed</param>
+        /// <param name="interval">Interval in seconds</param>
+        /// <returns></returns>
+        public static Timeout SetInterval(Action callback, float interval)
+        {
+            return SetInterval(callback, Utility.SecondsToMilliseconds(interval));
+        }
+
+        /// <summary>
+        /// Sets action to execute on next <see cref="TimerManager"/> tick
+        /// </summary>
+        /// <param name="callback">Action to execute</param>
+        /// <returns></returns>
         public static Immediate SetImmediate(Action callback)
         {
             if (callback is null)
@@ -32,130 +127,132 @@ namespace JsTimers
             }
 
             var immediate = new Immediate(callback);
-            RunImmediate(immediate);
-
+            lock (NextTickQueue)
+            {
+                NextTickQueue.Enqueue(immediate);
+            }
             return immediate;
         }
 
-        public static Timeout SetTimeout(Action callback, int timeout)
+        /// <summary>
+        /// Cancels specified timeout. Has no effect on timers which were already destroyed
+        /// </summary>
+        /// <param name="timeout">Timer to cancel</param>
+        public static void ClearTimeout(Timeout timeout)
         {
-            if (callback is null)
-            {
-                throw new ArgumentNullException(nameof(callback), "Callback must be a function. Received null");
-            }
-
-            var timer = new Timeout(callback, timeout, false);
-            RunTimeout(timer);
-
-            return timer;
+            ClearTimer(timeout);
         }
 
-        public static Timeout SetInterval(Action callback, int interval)
+        /// <summary>
+        /// Cancels subsequent executions of specified interval timer. Has no effect on timers which were already destroyed
+        /// </summary>
+        /// <param name="interval">Timer to cancel</param>
+        public static void ClearInterval(Timeout interval)
         {
-            if (callback is null)
-            {
-                throw new ArgumentNullException(nameof(callback), "Callback must be a function. Received null");
-            }
-
-            var timer = new Timeout(callback, interval, true);
-            RunTimeout(timer);
-
-            return timer;
+            ClearTimer(interval);
         }
 
+        /// <summary>
+        /// Cancels execution of given immediate. Has no effect on immediates which were already executed/cancelled
+        /// </summary>
+        /// <param name="immediate">Immediate to cancel</param>
         public static void ClearImmediate(Immediate immediate)
         {
-            immediate.Destroy(false);
-
-        }
-
-        internal static void RunImmediate(Immediate immediate)
-        {
-            NextTickQueue.Enqueue(immediate);
-            OnQueueUpdated();
-        }
-
-        internal static void RunTimeout(Timeout timeout)
-        {
-            Timeouts.Add(timeout);
-            OnQueueUpdated();
-        }
-
-        static void OnQueueUpdated()
-        {
-            lock (sync)
+            if (immediate is null || immediate.Destroyed)
             {
-                if (!Timer.Enabled)
+                return;
+            }
+
+            lock (NextTickQueue)
+            {
+                immediate.DestroyNow();
+            }
+        }
+
+        #endregion
+
+        internal static void RefMe(Timer timer)
+        {
+            lock (timer)
+            {
+                refsCount = refsCount + 1;
+
+                DebugLogger.Log("Refed timer #{0}, total refs: {1}", timer.Id, refsCount);
+            }
+        }
+
+        internal static void UnRefMe(Timer timer)
+        {
+            lock (timer)
+            {
+                refsCount = refsCount - 1;
+
+                DebugLogger.Log("Unrefed timer #{0}, total refs: {1}", timer.Id, refsCount);
+            }
+        }
+
+        internal static bool RaiseException(Timer timer, Exception exception)
+        {
+            if (OnTimerError == null)
+            {
+                return false;
+            }
+
+            OnTimerError.Invoke(timer, exception);
+            return true;
+        }
+
+        internal static int GetId()
+        {
+            lastId = lastId + 1;
+            return lastId;
+        }
+
+        internal static void Requeue(Timeout timeout)
+        {
+            ActiveTimeouts.Add(timeout);
+        }
+
+        static void ClearTimer(Timeout timer)
+        {
+            if (timer is null || timer.Destroyed)
+            {
+                return;
+            }
+
+            timer.DestroyNow();
+        }
+
+        static void ProcessTick()
+        {
+            lock (NextTickQueue)
+            {
+                while (NextTickQueue.Count > 0)
                 {
-                    StartTicking();
+                    Immediate immediate = NextTickQueue.Dequeue();
+                    if (immediate.Destroyed)
+                    {
+                        continue;
+                    }
+                    immediate.SafeExecute();
                 }
             }
-        }
 
-        static void SafeExecute(Timer timer)
-        {
-            try
+            long ticksNow = TicksNow;
+            for (int i = ActiveTimeouts.Count - 1; i >= 0; i--)
             {
-                timer.Execute();
-            }
-            catch (Exception e)
-            {
-                if (OnError != null)
+                Timeout timeout = ActiveTimeouts[i];
+                if (timeout.Destroyed)
                 {
-                    OnError.Invoke(e);
-                }
-                else
-                {
-                    Console.Error.WriteLine(e);
-                }
-            }
-        }
-
-        static void OnTick(object sender, ElapsedEventArgs args)
-        {
-            elapsedTicks++;
-            while (NextTickQueue.Count > 0)
-            {
-                Immediate immediate = NextTickQueue.Dequeue();
-                if(!immediate.Destroyed)
-                    SafeExecute(immediate);
-            }
-
-            for (int i = Timeouts.Count - 1; i >= 0; i--)
-            {
-                Timeout timeout = Timeouts[i];
-                int duration = timeout.DelayMilliseconds;
-                if (elapsedTicks % duration != 0)
-                {
+                    ActiveTimeouts.RemoveAt(i);
                     continue;
                 }
 
-                SafeExecute(timeout);
-
-                if (timeout.Destroyed)
+                if (timeout.nextExecutionTime <= ticksNow)
                 {
-                    Timeouts.RemoveAt(i);
+                    timeout.SafeExecute();
                 }
             }
-
-            lock (sync)
-            {
-                if (Timeouts.Count == 0)
-                {
-                    StopTicking();
-                }
-            }
-        }
-
-        static void StartTicking()
-        {
-            elapsedTicks = 0;
-            Timer.Enabled = true;
-        }
-
-        static void StopTicking()
-        {
-            Timer.Enabled = false;
         }
     }
 }

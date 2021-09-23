@@ -2,28 +2,18 @@
 
 namespace JsTimers
 {
-    public class Immediate : Timer
+    /// <summary>
+    /// Timer which is guaranteed to execute at most once.
+    /// Has higher execution preference than <see cref="Timeout"/>
+    /// </summary>
+    public sealed class Immediate : Timer
     {
-        internal Immediate(Action callback) : base(callback, 0)
+        internal Immediate(Action callback) : base(callback, 0) { }
+
+        internal override void SafeExecute()
         {
-
-        }
-
-        internal override void Execute()
-        {
-            destroyed = true;
-            base.Execute();
-        }
-
-        public void Refresh()
-        {
-            if (!destroyed)
-            {
-                return;
-            }
-
-            destroyed = false;
-            TimerManager.RunImmediate(this);
+            base.SafeExecute();
+            Destroyed = true;
         }
     }
 }

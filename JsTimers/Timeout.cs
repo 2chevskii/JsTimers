@@ -2,30 +2,48 @@
 
 namespace JsTimers
 {
-    public class Timeout : Timer
+    /// <summary>
+    /// Timer which can be ran one or multiple times and restarted on demand
+    /// </summary>
+    public sealed class Timeout : Timer
     {
-        readonly bool _shouldRepeat;
+        readonly bool _repeating;
 
-        internal Timeout(Action callback, int duration, bool shouldRepeat) : base(callback, duration)
+        /// <summary>
+        /// Indicates whether timer will be executed multiple times
+        /// </summary>
+        public bool IsInterval => _repeating;
+
+        internal Timeout(Action callback, int delay, bool repeating) : base(callback, delay)
         {
-            _shouldRepeat = shouldRepeat;
+            _repeating = repeating;
         }
 
-        internal override void Execute()
-        {
-            destroyed = !_shouldRepeat;
-            base.Execute();
-        }
-
+        /// <summary>
+        /// Resets time left to next execution. If timer has been destroyed, it will be restarted
+        /// </summary>
         public void Refresh()
         {
-            if (!destroyed)
-            {
-                return;
-            }
+            RefreshExecutionTime();
 
-            destroyed = false;
-            TimerManager.RunTimeout(this);
+            if (_destroyed)
+            {
+                TimerManager.Requeue(this);
+                Destroyed = false;
+            }
+        }
+
+        internal override void SafeExecute()
+        {
+            base.SafeExecute();
+            if (!_repeating)
+            {
+                Destroyed = true;
+            }
+            else
+            {
+                RefreshExecutionTime();
+            }
         }
     }
 }
