@@ -26,6 +26,20 @@ namespace JsTimers
             return GetMethod(instance.GetType(), methodName, INSTANCE_BINDING_FLAGS);
         }
 
+        public static Action GetCallback(object instance, string methodName, object[] args)
+        {
+            var methodInfo = GetInstanceMethod(instance, methodName);
+            var callback = BuildCallbackFromInfo(methodInfo, instance, args);
+            return callback;
+        }
+
+        public static Action GetCallback(Type type, string methodName, object[] args)
+        {
+            var methodInfo = GetStaticMethod(type, methodName);
+            var callback = BuildCallbackFromInfo(methodInfo, null, args);
+            return callback;
+        }
+
         public static long MillisecondsToTicks(int milliseconds)
         {
             return milliseconds * TimeSpan.TicksPerMillisecond;
