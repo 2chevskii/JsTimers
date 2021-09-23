@@ -27,8 +27,7 @@ namespace JsTimers
         static TimerManager()
         {
             AppDomain = AppDomain.CurrentDomain;
-            AppDomain.ProcessExit += (_, __) =>
-            {
+            AppDomain.ProcessExit += (_, __) => {
                 while (refsCount != 0)
                 {
                     Thread.Sleep(1);
@@ -48,6 +47,12 @@ namespace JsTimers
 
         #region Public API
 
+        /// <summary>
+        /// Sets a timer which executes <paramref name="callback"/> after <paramref name="delay"/> milliseconds
+        /// </summary>
+        /// <param name="callback">Action to execute after <paramref name="delay"/> has passed</param>
+        /// <param name="delay">Delay in milliseconds</param>
+        /// <returns></returns>
         public static Timeout SetTimeout(Action callback, int delay)
         {
             if (callback is null)
@@ -67,11 +72,47 @@ namespace JsTimers
             return timeout;
         }
 
+        /// <summary>
+        /// Sets a timer which executes <paramref name="callback"/> after <paramref name="delay"/> seconds
+        /// </summary>
+        /// <param name="callback">Action to execute after <paramref name="delay"/> has passed</param>
+        /// <param name="delay">Delay in seconds</param>
+        /// <returns></returns>
         public static Timeout SetTimeout(Action callback, float delay)
         {
             return SetTimeout(callback, ConvertToMilliseconds(delay));
         }
 
+        public static Timeout SetTimeout(object obj, string methodName, int delay, params object[] args)
+        {
+            var callback = GetCallbackFromInstanceMethod(obj, methodName, args);
+
+            return SetTimeout(callback, delay);
+        }
+
+        public static Timeout SetTimeout(Type type, string methodName, int delay, params object[] args)
+        {
+            var callback = GetCallbackFromStaticMethod(type, methodName, args);
+
+            return SetTimeout(callback, delay);
+        }
+
+        public static Timeout SetTimeout(object obj, string methodName, float delay, params object[] args)
+        {
+            return SetTimeout(obj, methodName, ConvertToMilliseconds(delay), args);
+        }
+
+        public static Timeout SetTimeout(Type type, string methodName, float delay, params object[] args)
+        {
+            return SetTimeout(type, methodName, ConvertToMilliseconds(delay), args);
+        }
+
+        /// <summary>
+        /// Sets timer which repeatedly executes <paramref name="callback"/> every <paramref name="interval"/> milliseconds
+        /// </summary>
+        /// <param name="callback">Action to execute every time <paramref name="interval"/> has passed</param>
+        /// <param name="interval">Interval in milliseconds</param>
+        /// <returns></returns>
         public static Timeout SetInterval(Action callback, int interval)
         {
             if (callback is null)
@@ -84,11 +125,22 @@ namespace JsTimers
             return timeout;
         }
 
+        /// <summary>
+        /// Sets timer which repeatedly executes <paramref name="callback"/> every <paramref name="interval"/> seconds
+        /// </summary>
+        /// <param name="callback">Action to execute every time <paramref name="interval"/> has passed</param>
+        /// <param name="interval">Interval in seconds</param>
+        /// <returns></returns>
         public static Timeout SetInterval(Action callback, float interval)
         {
             return SetInterval(callback, ConvertToMilliseconds(interval));
         }
 
+        /// <summary>
+        /// Sets action to execute on next <see cref="TimerManager"/> tick
+        /// </summary>
+        /// <param name="callback">Action to execute</param>
+        /// <returns></returns>
         public static Immediate SetImmediate(Action callback)
         {
             if (callback is null)
@@ -118,16 +170,28 @@ namespace JsTimers
             return SetImmediate(callback);
         }
 
-        public static void ClearInterval(Timeout interval)
-        {
-            ClearTimer(interval);
-        }
-
+        /// <summary>
+        /// Cancels specified timeout. Has no effect on timers which were already destroyed
+        /// </summary>
+        /// <param name="timeout">Timer to cancel</param>
         public static void ClearTimeout(Timeout timeout)
         {
             ClearTimer(timeout);
         }
 
+        /// <summary>
+        /// Cancels subsequent executions of specified interval timer. Has no effect on timers which were already destroyed
+        /// </summary>
+        /// <param name="interval">Timer to cancel</param>
+        public static void ClearInterval(Timeout interval)
+        {
+            ClearTimer(interval);
+        }
+
+        /// <summary>
+        /// Cancels execution of given immediate. Has no effect on immediates which were already executed/cancelled
+        /// </summary>
+        /// <param name="immediate">Immediate to cancel</param>
         public static void ClearImmediate(Immediate immediate)
         {
             if (immediate is null || immediate.Destroyed)
@@ -255,16 +319,14 @@ namespace JsTimers
         {
             if (methodInfo.IsStatic)
             {
-                return () =>
-                {
+                return () => {
                     methodInfo.Invoke(null, args);
                 };
             }
 
             if (args.Length == 1)
             {
-                return () =>
-                {
+                return () => {
                     methodInfo.Invoke(args[0], Array.Empty<object>());
                 };
             }
@@ -277,8 +339,7 @@ namespace JsTimers
                 remainingArgs[i - 1] = args[i];
             }
 
-            return () =>
-            {
+            return () => {
                 methodInfo.Invoke(obj, remainingArgs);
             };
         }
