@@ -5,10 +5,8 @@ install:
 build:
   project: JsTimers.sln
   verbosity: minimal
-after_build:
-  - cmd: IF %CONFIGURATION%==Release (msbuild -t:pack -property:Configuration=Release JsTimers.sln)
+  publish_nuget: true
 configuration:
-  - Debug
   - Release
 artifacts:
   - path: bin/Release/JsTimers.1.0.*.nupkg
