@@ -1,4 +1,6 @@
-.vs
-*obj/
-*bin/
+.vs/
+.idea/
+obj/
+bin/
 TestResults/
+_ReSharper.Caches/
