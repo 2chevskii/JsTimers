@@ -3,11 +3,45 @@ using System.Threading;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+using static JsTimers.TimerManager;
+
 namespace JsTimers.Tests
 {
     [TestClass]
     public class TimerManagerTest
     {
+        private const           int    ZERO = 0;
+        private static readonly Action Noop = () => { };
+        
+        [TestMethod]
+        public void SetTimeoutInitTest()
+        {
+            Timeout timeout = SetTimeout(Noop, ZERO);
+            Assert.IsNotNull(timeout);
+            Assert.IsFalse(timeout.Destroyed);
+            Assert.IsFalse(timeout.IsInterval);
+            Assert.IsTrue(timeout.HasRef());
+        }
+
+        [TestMethod]
+        public void SetIntervalInitTest()
+        {
+            Timeout timeout = SetInterval(Noop, ZERO);
+            Assert.IsNotNull(timeout);
+            Assert.IsFalse(timeout.Destroyed);
+            Assert.IsTrue(timeout.IsInterval);
+            Assert.IsTrue(timeout.HasRef());
+        }
+
+        [TestMethod]
+        public void SetImmediateInitTest()
+        {
+            Immediate immediate = SetImmediate(Noop);
+            Assert.IsNotNull(immediate);
+            Assert.IsFalse(immediate.Destroyed);
+            Assert.IsTrue(immediate.HasRef());
+        }
+
         [TestMethod]
         public void SetTimeoutTest()
         {
