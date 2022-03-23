@@ -1,6 +1,14 @@
+# IDE caches
 .vs/
 .idea/
+_ReSharper.Caches/
+
+# Build artifacts
 obj/
 bin/
+
+# Test artifacts
 TestResults/
-_ReSharper.Caches/
+
+# 3rd party
+node_modules/

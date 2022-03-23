@@ -1,4 +1,4 @@
-version: 1.0.{build}-{branch}
+version: 1.0.{build}-{branch} # TODO: Update and cleanup this
 image: Visual Studio 2019
 skip_tags: true
 skip_commits:
