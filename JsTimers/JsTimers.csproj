@@ -16,6 +16,8 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <AssemblyVersion>$(Version).0</AssemblyVersion>
     <FileVersion>$(Version).0</FileVersion>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -44,6 +46,18 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <PackagePath></PackagePath>
     </None>
+    <None Include="..\assets\graphics\rendered\icon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="assets\graphics\rendered\" />
   </ItemGroup>
 
 </Project>
