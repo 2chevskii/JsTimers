@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -12,7 +11,7 @@ namespace JsTimers.Tests
     public class TimerManagerTest
     {
         [TestMethod]
-        public void SetTimeoutInitTest()
+        public void SetTimeoutTest()
         {
             Timeout timeout = SetTimeout(Noop, ZERO);
             Assert.IsNotNull(timeout);
@@ -22,7 +21,7 @@ namespace JsTimers.Tests
         }
 
         [TestMethod]
-        public void SetIntervalInitTest()
+        public void SetIntervalTest()
         {
             Timeout timeout = SetInterval(Noop, ZERO);
             Assert.IsNotNull(timeout);
@@ -32,7 +31,7 @@ namespace JsTimers.Tests
         }
 
         [TestMethod]
-        public void SetImmediateInitTest()
+        public void SetImmediateTest()
         {
             Immediate immediate = SetImmediate(Noop);
             Assert.IsNotNull(immediate);
@@ -40,146 +39,121 @@ namespace JsTimers.Tests
             Assert.IsTrue(immediate.HasRef());
         }
 
-        [TestMethod]
-        public void SetRefEnableDisableTestTimeout()
+        [DataTestMethod]
+        [DataRow(ZERO, 100)]
+        [DataRow(5, 100)]
+        [DataRow(10, 100)]
+        [DataRow(40, 100)]
+        [DataRow(80, 100)]
+        [DataRow(100, 120)]
+        [DataRow(150, 200)]
+        public void SetTimeoutExecutionTest(int delay, int sleepTime)
         {
-            Timeout timeout = SetTimeout(Noop, ZERO);
-            
-            Assert.IsTrue(timeout.HasRef());
+            int timesFired = 0;
 
-            timeout.UnRef();
-            Assert.IsFalse(timeout.HasRef());
+            Timeout timeout = SetTimeout(() => timesFired++, delay);
 
-            timeout.Ref();
-            Assert.IsTrue(timeout.HasRef());
-        }
-
-        [TestMethod]
-        public void SetRefEnableDisableTestInterval()
-        {
-            Timeout interval = SetTimeout(Noop, ZERO);
-
-            Assert.IsTrue(interval.HasRef());
-
-            interval.UnRef();
-            Assert.IsFalse(interval.HasRef());
-
-            interval.Ref();
-            Assert.IsTrue(interval.HasRef());
-        }
-
-        [TestMethod]
-        public void SetRefEnableDisableTestImmediate()
-        {
-            Immediate immediate = SetImmediate(Noop);
-
-            Assert.IsTrue(immediate.HasRef());
-
-            immediate.UnRef();
-            Assert.IsFalse(immediate.HasRef());
-
-            immediate.Ref();
-            Assert.IsTrue(immediate.HasRef());
-        }
-
-        [TestMethod]
-        public void SetTimeoutTest()
-        {
-            var testStartTime = DateTime.Now;
-            var testEndTime = default(DateTime);
-
-            var timeout = TimerManager.SetTimeout(
-                () =>
-                {
-                    testEndTime = DateTime.Now;
-                },
-                1000
-            );
-
-            Thread.Sleep(1500);
+            Thread.Sleep(sleepTime);
 
             Assert.IsTrue(timeout.Destroyed);
-            var msPassed = (testEndTime - testStartTime).TotalMilliseconds;
-
-            Assert.IsTrue(msPassed >= 1000 && msPassed <= 1500);
+            Assert.AreEqual(1, timesFired);
         }
 
         [TestMethod]
-        public void SetIntervalTest()
+        public void SetIntervalExecutionTest()
         {
-            var testStartTime = DateTime.Now;
-            var testEndTime = default(DateTime);
-            var callbacksExecuted = 0;
+            int timesFired = 0;
 
-            var interval = TimerManager.SetInterval(
-                () =>
-                {
-                    callbacksExecuted++;
-
-                    if (callbacksExecuted == 3)
+            Timeout interval = SetInterval(
+                () => {
+                    if(timesFired < 3)
                     {
-                        testEndTime = DateTime.Now;
+                        timesFired++;
                     }
-                },
-                300
-            );
-            interval.UnRef();
-
-            Thread.Sleep(1000);
-            var msPassed = (testEndTime - testStartTime).TotalMilliseconds;
-
-            Assert.IsFalse(interval.Destroyed);
-            Assert.IsFalse(interval.HasRef());
-            Assert.IsTrue(msPassed >= 900 && msPassed <= 1000);
-        }
-
-        [TestMethod]
-        public void SetImmediateTest()
-        {
-            bool fired = false;
-
-            TimerManager.SetImmediate(
-                () =>
-                {
-                    fired = true;
-                }
-            );
+                }, 10);
 
             Thread.Sleep(50);
-            Assert.IsTrue(fired);
+
+            Assert.IsFalse(interval.Destroyed);
+            Assert.AreEqual(3, timesFired);
+        }
+
+        [TestMethod]
+        public void SetImmediateExecutionTest()
+        {
+            int timesFired = 0;
+
+            Immediate immediate = SetImmediate(() => timesFired++);
+
+            Thread.Sleep(30);
+
+            Assert.IsTrue(immediate.Destroyed);
+            Assert.AreEqual(1, timesFired);
         }
 
         [TestMethod]
         public void ClearTimeoutTest()
         {
-            bool fired = false;
-            var timeout = TimerManager.SetTimeout(() => fired = true, 0);
+            int timesFired = 0;
 
-            TimerManager.ClearTimeout(timeout);
-            Thread.Sleep(50);
-            Assert.IsFalse(fired);
+            var timeout = SetTimeout(Noop, ZERO);
+
+            ClearTimeout(timeout);
+
+            Assert.IsTrue(timeout.Destroyed);
+            Assert.AreEqual(0, timesFired);
         }
 
         [TestMethod]
         public void ClearIntervalTest()
         {
-            bool fired = false;
-            var timeout = TimerManager.SetInterval(() => fired = true, 0);
+            int timesFired = 0;
 
-            TimerManager.ClearInterval(timeout);
-            Thread.Sleep(50);
-            Assert.IsFalse(fired);
+            var interval = SetInterval(Noop, ZERO);
+
+            ClearInterval(interval);
+
+            Assert.IsTrue(interval.Destroyed);
+            Assert.AreEqual(0, timesFired);
         }
 
         [TestMethod]
         public void ClearImmediateTest()
         {
-            bool fired = false;
-            var timeout = TimerManager.SetImmediate(() => fired = true);
+            int timesFired = 0;
 
-            TimerManager.ClearImmediate(timeout);
-            Thread.Sleep(50);
-            Assert.IsFalse(fired);
+            var immediate = SetImmediate(Noop);
+
+            ClearImmediate(immediate);
+
+            Assert.IsTrue(immediate.Destroyed);
+            Assert.AreEqual(0, timesFired);
+        }
+
+        [TestMethod]
+        public void ClearTimeoutWithClearIntervalTest()
+        {
+            int timesFired = 0;
+
+            var timeout = SetTimeout(Noop, ZERO);
+
+            ClearInterval(timeout);
+
+            Assert.IsTrue(timeout.Destroyed);
+            Assert.AreEqual(0, timesFired);
+        }
+
+        [TestMethod]
+        public void ClearIntervalWithClearTimeoutTest()
+        {
+            int timesFired = 0;
+
+            var interval = SetInterval(Noop, ZERO);
+
+            ClearTimeout(interval);
+
+            Assert.IsTrue(interval.Destroyed);
+            Assert.AreEqual(0, timesFired);
         }
     }
 }
