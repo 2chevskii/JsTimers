@@ -1,8 +1,8 @@
-
 ![Project logo][logo-local]
 
- [![Codefactor stats][codefactor-badge]][codefactor-stats]
+[![Codefactor stats][codefactor-badge]][codefactor-stats]
 [![AppVeyor build status][appveyor-badge]][appveyor-build-status]
+[![AppVeyor build status][nuget-badge]][nuget-package]
 
 > JavaScript-style timers for .NET
 
@@ -19,6 +19,16 @@ available in JavaScript, such as
 Original behaviour is closer to NodeJS
 (Returns objects instead of numbers, has ability to keep application running,
 et cetera) and is replicated as much as possible inside of the CLR
+
+## Installation
+
+### Package manager console
+
+`Install-Package JsTimers`
+
+### .NET CLI
+
+`dotnet add package JsTimers`
 
 ## Usage
 
@@ -149,7 +159,9 @@ but if you want to build an atomic clock with that, I have bad news for you
 
 [logo-local]: assets/graphics/rendered/logo.png
 [icon-local]: assets/graphics/rendered/icon.png
-[codefactor-badge]: https://img.shields.io/codefactor/grade/github/2chevskii/jstimers/master
+[codefactor-badge]: https://img.shields.io/codefactor/grade/github/2chevskii/jstimers/master?color=%23f7df1e&logo=codefactor&logoColor=%23f7df1e&style=for-the-badge
 [codefactor-stats]: https://www.codefactor.io/repository/github/2chevskii/jstimers
-[appveyor-badge]: https://ci.appveyor.com/api/projects/status/sbvtwbsx4qlg0h5l/branch/master?svg=true
+[appveyor-badge]: https://img.shields.io/appveyor/build/2chevskii/jstimers/master?color=%23f7df1e&logo=appveyor&logoColor=%23f7df1e&style=for-the-badge
 [appveyor-build-status]: https://ci.appveyor.com/project/2chevskii/jstimers/branch/master
+[nuget-badge]: https://img.shields.io/nuget/v/jstimers?color=%23f7df1e&logo=nuget&logoColor=%23f7df1e&style=for-the-badge
+[nuget-package]: https://www.nuget.org/packages/JsTimers/
