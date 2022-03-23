@@ -4,15 +4,13 @@ using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using static JsTimers.TimerManager;
+using static JsTimers.Tests.Helpers;
 
 namespace JsTimers.Tests
 {
     [TestClass]
     public class TimerManagerTest
     {
-        private const           int    ZERO = 0;
-        private static readonly Action Noop = () => { };
-        
         [TestMethod]
         public void SetTimeoutInitTest()
         {
