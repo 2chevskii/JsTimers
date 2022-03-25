@@ -32,9 +32,17 @@
 version: 1.0.{build}-{branch}
 image: Visual Studio 2022
 for:
-  - branches:
-      only:
-        - docs
+  - only_commits:
+      files:
+        - docs/*
+    environment:
+      github_access_token:
+        secure: 3//rlUvhYJ4yXSe2MPtLJyE5RFw9HnEx64mPPLNPXSTOFQd26eXBkoHspFPo5DqC
+    init:
+      - pwsh: git config --global user.name 2chevskii
+      - pwsh: git config --global user.email prsroman3@gmail.com
+      - pwsh: git config --global credential.helper store
+      - pwsh: Set-Content -Path "$HOME/.git-credentials" -Value "https://$($env:github_access_token):x-oauth-basic@github.com"
     build_script:
       - pwsh: npm install
       - pwsh: npm run docs:build
