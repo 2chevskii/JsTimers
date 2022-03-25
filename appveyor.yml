@@ -38,7 +38,7 @@ for:
     environment:
       github_access_token:
         secure: 3//rlUvhYJ4yXSe2MPtLJyE5RFw9HnEx64mPPLNPXSTOFQd26eXBkoHspFPo5DqC
-    init:
+    install:
       - pwsh: git config --global user.name 2chevskii
       - pwsh: git config --global user.email prsroman3@gmail.com
       - pwsh: git config --global credential.helper store
@@ -49,5 +49,5 @@ for:
       - pwsh: cd docs/.vitepress/dist
       - pwsh: git init
       - pwsh: git add -A
-      - pwsh: git commit -m 'Deploy docs#$(appveyor_build_number)'
+      - pwsh: git commit -m 'Deploy docs#$($env:APPVEYOR_BUILD_NUMBER)'
       - pwsh: git push -f git@github.com:2chevskii/jstimers.git docs
