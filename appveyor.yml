@@ -32,8 +32,8 @@
 version: 1.0.{build}-{branch}
 image: Visual Studio 2022
 for:
-  - branches:
-      - only:
+  - only:
+      - branches:
           - docs
     build_script:
       - pwsh: npm install
