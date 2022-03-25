@@ -50,4 +50,4 @@ for:
       - pwsh: git init
       - pwsh: git add -A
       - pwsh: git commit -m 'Deploy docs#$($env:APPVEYOR_BUILD_NUMBER)'
-      - pwsh: git push -f git@github.com:2chevskii/jstimers.git docs
+      - pwsh: git push -f git@github.com:2chevskii/jstimers.git docs:gh-pages
