@@ -1,11 +1,12 @@
 {
+  "name": "@2chevskii/jstimers-docs",
+  "private": true,
   "scripts": {
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:serve": "vitepress serve docs"
   },
   "devDependencies": {
-    "@vue/theme": "^1.0.1",
     "vitepress": "^0.22.3"
   }
 }
