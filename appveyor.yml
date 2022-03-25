@@ -34,10 +34,10 @@ image: Visual Studio 2022
 for:
   - only_commits:
       files:
-        - docs/*
+        - '*'
     environment:
       github_access_token:
-        secure: 3//rlUvhYJ4yXSe2MPtLJyE5RFw9HnEx64mPPLNPXSTOFQd26eXBkoHspFPo5DqC
+        secure: oXcOV5MJg+RewNkM3MSV5ZU+gIUZOo8D/4cyW/p5I2ZXD+P2TgTK5ZZfCdQXDG3L
     install:
       - pwsh: git config --global user.name 2chevskii
       - pwsh: git config --global user.email prsroman3@gmail.com
