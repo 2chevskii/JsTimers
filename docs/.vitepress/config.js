@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitepress';
 
 export default defineConfig({
+  base: '/jstimers/',
   lang: 'en-US',
   title: 'JsTimers',
   description: 'Simple timer management for .NET',
