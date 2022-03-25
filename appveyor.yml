@@ -42,7 +42,7 @@ for:
       - pwsh: git config --global user.name 2chevskii
       - pwsh: git config --global user.email prsroman3@gmail.com
       - pwsh: git config --global credential.helper store
-      - pwsh: Set-Content -Path "$HOME/.git-credentials" -Value "https://$($env:github_access_token):x-oauth-basic@github.com"
+      - pwsh: Set-Content -Path "$HOME/.git-credentials" -Value "https://$($env:github_access_token):x-oauth-basic@github.com`n" -NoNewline
     build_script:
       - pwsh: npm install
       - pwsh: npm run docs:build
