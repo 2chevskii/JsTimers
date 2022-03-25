@@ -6,6 +6,7 @@ _ReSharper.Caches/
 # Build artifacts
 obj/
 bin/
+docs/.vitepress/dist/
 
 # Test artifacts
 TestResults/
