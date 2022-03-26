@@ -2,7 +2,7 @@ version: '{build}'
 image: Visual Studio 2022
 environment:
   GITHUB_ACCESS_TOKEN:
-    secure: ClKZOQeKEaL9+34YfQ7cdU4shau8SPy90UvKfaI/HhnepikI6P4BeMyX/GYfpnLs
+    secure: 4UE/AGhAuNmN8TaLYbHpIlAAx8pY7tFr4/MJTJgakffPuI8gtuCF2e79ciFoQ9GU
   NUGET_API_KEY:
     secure: GEF64/5AEQNBaRhepOWp4sYAQGeRxPujCrkKzs5+2BodzXbs1ar0ilabt8+5J/E0
 for:
