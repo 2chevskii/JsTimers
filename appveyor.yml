@@ -56,7 +56,12 @@ for:
       - pwsh: 'git push -f "https://2chevskii:$($env:GITHUB_ACCESS_TOKEN)@github.com/2chevskii/JsTimers.git" master:gh-pages'
   - only_commits:
       files:
-        - '!docs/**/*'
+        - 'JsTimers/**/*'
+        - 'JsTimers.Test/**/*'
+        - 'JsTimers.Tests/**/*'
+        - 'appveyor.yml'
+        - 'Directory.Build.props'
+        - 'JsTimers.sln'
     install:
       - ps: msbuild -t:restore JsTimers.sln
     build:
@@ -68,4 +73,4 @@ for:
     test:
       assemblies:
         only:
-          - JsTimers.Test/bin/Release/netstandard2.0/JsTimers.Test.dll
+          - JsTimers.Tests/bin/Release/netcoreapp3.1/JsTimers.Tests.dll
