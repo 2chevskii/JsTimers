@@ -64,12 +64,12 @@ for:
         on:
           APPVEYOR_REPO_TAG: true
           APPVEYOR_REPO_TAG_NAME: /^\d+\.\d+\.\d+(?:-.+)?$/
-        artifact: /.*\.(s?nupkg)/
+        artifact: /.*(\.|\.s)nupkg/
         skip_symbols: false
         api_key: $(NUGET_API_KEY)
       - provider: NuGet # Push to GitHub NuGet package registry
         server: https://nuget.pkg.github.com/2chevskii/index.json
-        artifact: /.*\.(s?nupkg)/
+        artifact: /.*(\.|\.s)nupkg/
         username: 2chevskii
         api_key: $(GITHUB_ACCESS_TOKEN)
         on:
