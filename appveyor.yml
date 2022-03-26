@@ -2,9 +2,9 @@ version: '{build}'
 image: Visual Studio 2022
 environment:
   GITHUB_ACCESS_TOKEN:
-    secure: ClKZOQeKEaL9+34YfQ7cdU4shau8SPy90UvKfaI/HhnepikI6P4BeMyX/GYfpnLs
+    secure: 4UE/AGhAuNmN8TaLYbHpIlAAx8pY7tFr4/MJTJgakffPuI8gtuCF2e79ciFoQ9GU
   NUGET_API_KEY:
-    secure: 5llcjQ7ZU0MacQj4HoqZdfXFgeY1HV5uUDkjpkOBXI3eYD/ZNfHvDSFBJV1FHbn1
+    secure: GEF64/5AEQNBaRhepOWp4sYAQGeRxPujCrkKzs5+2BodzXbs1ar0ilabt8+5J/E0
 for:
   - branches:
       only:
@@ -38,7 +38,7 @@ for:
           - JsTimers.Tests/bin/Release/netcoreapp3.1/JsTimers.Tests.dll
     artifacts:
       - path: JsTimers/bin/Release/netstandard2.0
-        name: netstandard2.0.zip
+        name: netstandard2.0
         type: zip
     deploy:
       - provider: GitHub # Create GitHub release, if tag is pure semver core (0.0.0)
@@ -64,12 +64,12 @@ for:
         on:
           APPVEYOR_REPO_TAG: true
           APPVEYOR_REPO_TAG_NAME: /^\d+\.\d+\.\d+(?:-.+)?$/
-        artifact: /.*\.(s?nupkg)/
+        artifact: /.*(\.|\.s)nupkg/
         skip_symbols: false
         api_key: $(NUGET_API_KEY)
       - provider: NuGet # Push to GitHub NuGet package registry
         server: https://nuget.pkg.github.com/2chevskii/index.json
-        artifact: /.*\.(s?nupkg)/
+        artifact: /.*(\.|\.s)nupkg/
         username: 2chevskii
         api_key: $(GITHUB_ACCESS_TOKEN)
         on:
