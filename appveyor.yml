@@ -50,4 +50,4 @@ for:
       - ps: git init --initial-branch=master
       - ps: git add -A
       - ps: 'git commit -m "Documentation deploy #$($env:APPVEYOR_BUILD_NUMBER)"'
-      - ps: git push -f https://git@github.com:2chevskii/JsTimers.git master:gh-pages
+      - ps: git push -f git@github.com:2chevskii/JsTimers.git master:gh-pages
