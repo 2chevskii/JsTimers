@@ -6,7 +6,7 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <IncludeSymbols>true</IncludeSymbols>
     <!--Version properties-->
-    <Version>1.0.38</Version>
+    <Version>1.0.39</Version>
     <Version Condition="'$(CI)' == 'True'">$(Version)-$(APPVEYOR_REPO_BRANCH)+$([System.Int32]::Parse($(APPVEYOR_BUILD_NUMBER)).ToString('X'))</Version>
     <Version Condition="'$(CI)' == 'True' AND '$(APPVEYOR_REPO_TAG)' == 'true'">$(APPVEYOR_REPO_TAG_NAME)</Version>
     <FileVersion Condition="'$(CI)' == 'True'">$(Version.Split('-')[0]).$(APPVEYOR_BUILD_NUMBER)</FileVersion>
