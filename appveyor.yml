@@ -4,7 +4,7 @@ environment:
   GITHUB_ACCESS_TOKEN:
     secure: ClKZOQeKEaL9+34YfQ7cdU4shau8SPy90UvKfaI/HhnepikI6P4BeMyX/GYfpnLs
   NUGET_API_KEY:
-    secure: 5llcjQ7ZU0MacQj4HoqZdfXFgeY1HV5uUDkjpkOBXI3eYD/ZNfHvDSFBJV1FHbn1
+    secure: GEF64/5AEQNBaRhepOWp4sYAQGeRxPujCrkKzs5+2BodzXbs1ar0ilabt8+5J/E0
 for:
   - branches:
       only:
