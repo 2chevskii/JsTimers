@@ -6,11 +6,14 @@ export default defineConfig({
   title: 'JsTimers',
   description: 'Simple timer management for .NET',
   head: [
-    ['link', { rel: 'icon', href: '/favicon.png?', type: 'image/x-icon' }],
     [
       'link',
-      { rel: 'shortcut icon', href: '/favicon.png?', type: 'image/x-icon' }
+      { rel: 'icon', href: '/JsTimers/favicon.png', type: 'image/x-icon' }
     ]
+    // [
+    //   'link',
+    //   { rel: 'shortcut icon', href: '/favicon.png?', type: 'image/x-icon' }
+    // ]
   ],
   themeConfig: {
     sidebar: [
