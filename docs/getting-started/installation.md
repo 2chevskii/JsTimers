@@ -4,7 +4,7 @@
 
 Inside of your package manager console, run the command:
 
-```sh
+```shell
 Install-Package JsTimers
 ```
 
@@ -12,7 +12,7 @@ Install-Package JsTimers
 
 From within your terminal, use:
 
-```sh
+```shell
 dotnet add package JsTimers
 ```
 

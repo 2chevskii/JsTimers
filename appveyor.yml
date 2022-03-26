@@ -43,8 +43,8 @@ for:
       - ps: git config --global user.email prsroman3@gmail.com
       - ps: git config --global credential.helper store
       - ps: Set-Content -Path "$HOME/.git-credentials" -Value "https://$($env:GITHUB_ACCESS_TOKEN):x-oauth-basic@github.com`n" -NoNewline
-    build_script:
       - pwsh: npm install --no-package-lock # fuck fuck fuck fuck fuck
+    build_script:
       - ps: npm run docs:build
       - ps: cd docs/.vitepress/dist
       - ps: git init --initial-branch=master
