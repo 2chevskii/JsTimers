@@ -31,13 +31,16 @@
 #       branch: master
 version: 1.0.{build}-{branch}
 image: Visual Studio 2022
+environment:
+  GITHUB_ACCESS_TOKEN:
+    secure: oXcOV5MJg+RewNkM3MSV5ZU+gIUZOo8D/4cyW/p5I2ZXD+P2TgTK5ZZfCdQXDG3L
 for:
   - only_commits:
       files:
         - 'docs/**/*'
-    environment:
-      GITHUB_ACCESS_TOKEN:
-        secure: oXcOV5MJg+RewNkM3MSV5ZU+gIUZOo8D/4cyW/p5I2ZXD+P2TgTK5ZZfCdQXDG3L
+    branches:
+      only:
+        - master
     install:
       - ps: git config --global user.name 2chevskii
       - ps: git config --global user.email prsroman3@gmail.com
@@ -51,3 +54,18 @@ for:
       - ps: git add -A
       - ps: 'git commit -m "Documentation deploy #$($env:APPVEYOR_BUILD_NUMBER)"'
       - pwsh: 'git push -f "https://2chevskii:$($env:GITHUB_ACCESS_TOKEN)@github.com/2chevskii/JsTimers.git" master:gh-pages'
+  # - branches:
+  #     only:
+  #       - master
+install:
+  - ps: msbuild -t:restore JsTimers.sln
+build:
+  project: JsTimers.sln
+  publish_nuget: true
+  publish_nuget_symbols: true
+configuration:
+  - Release
+test:
+  assemblies:
+    only:
+      - JsTimers.Test/bin/Release/netstandard2.0/JsTimers.Test.dll
