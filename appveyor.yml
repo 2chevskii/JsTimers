@@ -1,31 +1,76 @@
-version: 1.0.{build}-{branch} # TODO: Update and cleanup this
-image: Visual Studio 2019
-skip_tags: true
-skip_commits:
-  message: /!skip-ci/
-install:
-  - cmd: msbuild -t:restore JsTimers.sln
-build:
-  project: JsTimers.sln
-  verbosity: minimal
-  publish_nuget: true
-configuration:
-  - Release
-artifacts:
-  - path: JsTimers\bin\Release\netstandard2.0\JsTimers.dll
-deploy:
-  - provider: GitHub
-    tag: JsTimers v$(appveyor_build_version)
-    auth_token:
-      secure: 6NC5njRDgZxwvNmpiVm0gPw9yFw4ff7hLFFMA53FTFFB0WtRiWSW+ekc+1A6IABr
-    artifact: /.*\.(nupkg|dll)/
-    prerelease: true
-    on:
-      branch: develop
-  - provider: GitHub
-    tag: JsTimers v1.0.$(appveyor_build_number)
-    auth_token:
-      secure: 6NC5njRDgZxwvNmpiVm0gPw9yFw4ff7hLFFMA53FTFFB0WtRiWSW+ekc+1A6IABr
-    artifact: /.*\.(nupkg|dll)/
-    on:
-      branch: master
+# version: 1.0.{build}-{branch} # TODO: Update and cleanup this
+# image: Visual Studio 2019
+# skip_tags: true
+# skip_commits:
+#   message: /!skip-ci/
+# install:
+#   - cmd: msbuild -t:restore JsTimers.sln
+# build:
+#   project: JsTimers.sln
+#   verbosity: minimal
+#   publish_nuget: true
+# configuration:
+#   - Release
+# artifacts:
+#   - path: JsTimers\bin\Release\netstandard2.0\JsTimers.dll
+# deploy:
+#   - provider: GitHub
+#     tag: JsTimers v$(appveyor_build_version)
+#     auth_token:
+#       secure: 6NC5njRDgZxwvNmpiVm0gPw9yFw4ff7hLFFMA53FTFFB0WtRiWSW+ekc+1A6IABr
+#     artifact: /.*\.(nupkg|dll)/
+#     prerelease: true
+#     on:
+#       branch: develop
+#   - provider: GitHub
+#     tag: JsTimers v1.0.$(appveyor_build_number)
+#     auth_token:
+#       secure: 6NC5njRDgZxwvNmpiVm0gPw9yFw4ff7hLFFMA53FTFFB0WtRiWSW+ekc+1A6IABr
+#     artifact: /.*\.(nupkg|dll)/
+#     on:
+#       branch: master
+version: '{build}'
+image: Visual Studio 2022
+environment:
+  GITHUB_ACCESS_TOKEN:
+    secure: oXcOV5MJg+RewNkM3MSV5ZU+gIUZOo8D/4cyW/p5I2ZXD+P2TgTK5ZZfCdQXDG3L
+for:
+  - only_commits:
+      files:
+        - 'docs/**/*'
+    branches:
+      only:
+        - master
+    install:
+      - ps: git config --global user.name 2chevskii
+      - ps: git config --global user.email prsroman3@gmail.com
+      # - ps: git config --global credential.helper store
+      # - ps: Set-Content -Path "$HOME/.git-credentials" -Value "https://$($env:GITHUB_ACCESS_TOKEN):x-oauth-basic@github.com`n" -NoNewline
+      - pwsh: npm install --no-package-lock # fuck fuck fuck fuck fuck
+    build_script:
+      - pwsh: npm run docs:build
+      - ps: cd docs/.vitepress/dist
+      - ps: git init --initial-branch=master
+      - ps: git add -A
+      - ps: 'git commit -m "Documentation deploy #$($env:APPVEYOR_BUILD_NUMBER)"'
+      - pwsh: 'git push -f "https://2chevskii:$($env:GITHUB_ACCESS_TOKEN)@github.com/2chevskii/JsTimers.git" master:gh-pages'
+  - only_commits:
+      files:
+        - 'JsTimers/**/*'
+        - 'JsTimers.Test/**/*'
+        - 'JsTimers.Tests/**/*'
+        - 'appveyor.yml'
+        - 'Directory.Build.props'
+        - 'JsTimers.sln'
+    install:
+      - ps: msbuild -t:restore JsTimers.sln
+    build:
+      project: JsTimers.sln
+      publish_nuget: true
+      publish_nuget_symbols: true
+    configuration:
+      - Release
+    test:
+      assemblies:
+        only:
+          - JsTimers.Tests/bin/Release/netcoreapp3.1/JsTimers.Tests.dll

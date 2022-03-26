@@ -4,6 +4,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <IsPackable>false</IsPackable>
     <Configurations>Debug</Configurations>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <FileVersion Condition="'$(CI)' == 'True'">$(AssemblyVersion).$(APPVEYOR_BUILD_NUMBER)</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

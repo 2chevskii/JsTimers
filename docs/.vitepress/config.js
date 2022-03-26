@@ -1,10 +1,11 @@
 import { defineConfig } from 'vitepress';
 
 export default defineConfig({
+  base: '/JsTimers',
   lang: 'en-US',
   title: 'JsTimers',
   description: 'Simple timer management for .NET',
-  head: [['link', { rel: 'icon', href: '/favicon.png' }]],
+  head: [['link', { rel: 'icon', href: '/favicon.png', type: 'image/x-icon' }]],
   themeConfig: {
     sidebar: [
       {
