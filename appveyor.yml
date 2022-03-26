@@ -1,34 +1,3 @@
-# version: 1.0.{build}-{branch} # TODO: Update and cleanup this
-# image: Visual Studio 2019
-# skip_tags: true
-# skip_commits:
-#   message: /!skip-ci/
-# install:
-#   - cmd: msbuild -t:restore JsTimers.sln
-# build:
-#   project: JsTimers.sln
-#   verbosity: minimal
-#   publish_nuget: true
-# configuration:
-#   - Release
-# artifacts:
-#   - path: JsTimers\bin\Release\netstandard2.0\JsTimers.dll
-# deploy:
-#   - provider: GitHub
-#     tag: JsTimers v$(appveyor_build_version)
-#     auth_token:
-#       secure: 6NC5njRDgZxwvNmpiVm0gPw9yFw4ff7hLFFMA53FTFFB0WtRiWSW+ekc+1A6IABr
-#     artifact: /.*\.(nupkg|dll)/
-#     prerelease: true
-#     on:
-#       branch: develop
-#   - provider: GitHub
-#     tag: JsTimers v1.0.$(appveyor_build_number)
-#     auth_token:
-#       secure: 6NC5njRDgZxwvNmpiVm0gPw9yFw4ff7hLFFMA53FTFFB0WtRiWSW+ekc+1A6IABr
-#     artifact: /.*\.(nupkg|dll)/
-#     on:
-#       branch: master
 version: '{build}'
 image: Visual Studio 2022
 environment:
@@ -40,9 +9,9 @@ for:
   - only_commits:
       files:
         - 'docs/**/*'
-    branches:
-      only:
-        - master
+    # branches:
+    #   only:
+    #     - master
     install:
       - ps: git config --global user.name 2chevskii
       - ps: git config --global user.email prsroman3@gmail.com
@@ -55,19 +24,15 @@ for:
       - ps: 'git commit -m "Documentation deploy #$($env:APPVEYOR_BUILD_NUMBER)"'
       - pwsh: 'git push -f "https://2chevskii:$($env:GITHUB_ACCESS_TOKEN)@github.com/2chevskii/JsTimers.git" master:gh-pages'
     test: false
-  - only_commits:
-      files:
-        - 'JsTimers/**/*'
-        - 'JsTimers.Tests/**/*'
-        - 'appveyor.yml'
-        - 'Directory.Build.props'
-        - 'JsTimers.sln'
-    branches:
-      only:
-        - master
-        - develop
-        - /\d+\.\d+\.\d+(?:-.+)?/
-    install:
+  # - only_commits:
+  #     files:
+  #       - '**/*'
+  # branches:
+  #   only:
+  #     - master
+  #     - develop
+  #     - /\d+\.\d+\.\d+(?:-.+)?/
+  - install:
       - ps: msbuild -t:restore JsTimers.sln
     build:
       project: JsTimers.sln
