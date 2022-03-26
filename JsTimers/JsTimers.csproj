@@ -7,9 +7,9 @@
     <IncludeSymbols>true</IncludeSymbols>
     <!--Version properties-->
     <Version>1.0.37</Version>
-    <Version Condition="'$(CI)' == 'True'">1.0.37-$(APPVEYOR_REPO_BRANCH)+$([System.Int32]::Parse($(APPVEYOR_BUILD_NUMBER)).ToString('X'))</Version>
+    <Version Condition="'$(CI)' == 'True'">$(Version)-$(APPVEYOR_REPO_BRANCH)+$([System.Int32]::Parse($(APPVEYOR_BUILD_NUMBER)).ToString('X'))</Version>
     <Version Condition="'$(CI)' == 'True' AND '$(APPVEYOR_REPO_TAG)' == 'true'">$(APPVEYOR_REPO_TAG_NAME)</Version>
-    <FileVersion Condition="'$(CI)' == 'True'">$(Version).$(APPVEYOR_BUILD_NUMBER)</FileVersion>
+    <FileVersion Condition="'$(CI)' == 'True'">$(Version.Split('-')[0]).$(APPVEYOR_BUILD_NUMBER)</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
