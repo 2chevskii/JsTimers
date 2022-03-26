@@ -58,11 +58,15 @@ for:
   - only_commits:
       files:
         - 'JsTimers/**/*'
-        - 'JsTimers.Test/**/*'
         - 'JsTimers.Tests/**/*'
         - 'appveyor.yml'
         - 'Directory.Build.props'
         - 'JsTimers.sln'
+    branches:
+      only:
+        - master
+        - develop
+        - /\d+\.\d+\.\d+(?:-.+)?/
     install:
       - ps: msbuild -t:restore JsTimers.sln
     build:
