@@ -45,7 +45,7 @@ for:
         name: GitHub Release
         on:
           APPVEYOR_REPO_TAG: true
-          APPVEYOR_REPO_TAG_NAME: /\d+\.\d+\.\d+/
+          APPVEYOR_REPO_TAG_NAME: /^\d+\.\d+\.\d+$/
         tag: $(appveyor_repo_tag_name)
         release: JsTimers v$(appveyor_repo_tag_name)
         auth_token: $(GITHUB_ACCESS_TOKEN)
@@ -55,7 +55,7 @@ for:
         name: GitHub PreRelease
         on:
           APPVEYOR_REPO_TAG: true
-          APPVEYOR_REPO_TAG_NAME: /\d+\.\d+\.\d+-.+/
+          APPVEYOR_REPO_TAG_NAME: /^\d+\.\d+\.\d+-.+$/
         tag: $(appveyor_repo_tag_name)
         auth_token: $(GITHUB_ACCESS_TOKEN)
         prerelease: true
@@ -63,7 +63,7 @@ for:
       - provider: NuGet # Push to nuget.org package registry
         on:
           APPVEYOR_REPO_TAG: true
-          APPVEYOR_REPO_TAG_NAME: /\d+\.\d+\.\d+(?:-.+)?/
+          APPVEYOR_REPO_TAG_NAME: /^\d+\.\d+\.\d+(?:-.+)?$/
         artifact: /.*\.(s?nupkg)/
         skip_symbols: false
         api_key: $(NUGET_API_KEY)
@@ -74,5 +74,5 @@ for:
         api_key: $(GITHUB_ACCESS_TOKEN)
         on:
           APPVEYOR_REPO_TAG: true
-          APPVEYOR_REPO_TAG_NAME: /\d+\.\d+\.\d+(?:-.+)?/
+          APPVEYOR_REPO_TAG_NAME: /^\d+\.\d+\.\d+(?:-.+)?$/
         # skip_symbols: true
