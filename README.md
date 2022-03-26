@@ -4,6 +4,9 @@
 [![AppVeyor build status][appveyor-badge]][appveyor-build-status]
 [![AppVeyor build status][nuget-badge]][nuget-package]
 
+<!-- TODO: Links at the top of docs (Github, Nuget and stuff) -->
+<!-- TODO: Fix access token mess -->
+
 > JavaScript-style timers for .NET
 
 Library offers simple API which mimics behaviour of NodeJS/Browser functions
