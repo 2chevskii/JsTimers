@@ -33,19 +33,19 @@ version: '{build}'
 image: Visual Studio 2022
 environment:
   GITHUB_ACCESS_TOKEN:
-    secure: oXcOV5MJg+RewNkM3MSV5ZU+gIUZOo8D/4cyW/p5I2ZXD+P2TgTK5ZZfCdQXDG3L
+    secure: ClKZOQeKEaL9+34YfQ7cdU4shau8SPy90UvKfaI/HhnepikI6P4BeMyX/GYfpnLs
+  NUGET_API_KEY:
+    secure: 5llcjQ7ZU0MacQj4HoqZdfXFgeY1HV5uUDkjpkOBXI3eYD/ZNfHvDSFBJV1FHbn1
 for:
   - only_commits:
       files:
         - 'docs/**/*'
-    # branches:
-    #   only:
-    #     - master
+    branches:
+      only:
+        - master
     install:
       - ps: git config --global user.name 2chevskii
       - ps: git config --global user.email prsroman3@gmail.com
-      # - ps: git config --global credential.helper store
-      # - ps: Set-Content -Path "$HOME/.git-credentials" -Value "https://$($env:GITHUB_ACCESS_TOKEN):x-oauth-basic@github.com`n" -NoNewline
       - pwsh: npm install --no-package-lock # fuck fuck fuck fuck fuck
     build_script:
       - pwsh: npm run docs:build
@@ -75,3 +75,34 @@ for:
       assemblies:
         only:
           - JsTimers.Tests/bin/Release/netcoreapp3.1/JsTimers.Tests.dll
+    deploy:
+      - provider: GitHub # Create GitHub release, if tag is pure semver core (0.0.0)
+        name: GitHub Release
+        on:
+          branch: /\d+\.\d+\.\d+/
+        tag: $(appveyor_repo_tag_name)
+        auth_token: $(GITHUB_ACCESS_TOKEN)
+        prerelease: false
+        artifact: /.*\.(nupkg|dll)/
+      - provider: GitHub # Create GitHub pre-release, if tag contains suffix (0.0.0-alpha)
+        name: GitHub PreRelease
+        on:
+          branch: /\d+\.\d+\.\d+-.+/
+        tag: $(appveyor_repo_tag_name)
+        auth_token: $(GITHUB_ACCESS_TOKEN)
+        prerelease: true
+        artifact: /.*\.(nupkg|dll)/
+      - provider: NuGet # Push to nuget.org package registry
+        on:
+          branch: /\d+\.\d+\.\d+(?:-.+)?/
+        artifact: /.*\.(s?nupkg)/
+        skip_symbols: false
+        api_key: $(NUGET_API_KEY)
+      - provider: NuGet # Push to GitHub NuGet package registry
+        server: https://nuget.pkg.github.com/2chevskii/index.json
+        artifact: /.*\.(s?nupkg)/
+        username: 2chevskii
+        api_key: $(GITHUB_ACCESS_TOKEN)
+        on:
+          branch: /\d+\.\d+\.\d+(?:-.+)?/
+        # skip_symbols: true
