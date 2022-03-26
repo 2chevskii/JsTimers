@@ -47,6 +47,7 @@ for:
           APPVEYOR_REPO_TAG: true
           APPVEYOR_REPO_TAG_NAME: /\d+\.\d+\.\d+/
         tag: $(appveyor_repo_tag_name)
+        release: JsTimers v$(appveyor_repo_tag_name)
         auth_token: $(GITHUB_ACCESS_TOKEN)
         prerelease: false
         artifact: /.*\.(nupkg|dll)/
