@@ -18,3 +18,4 @@ to make it as easy as it is in JavaScript environments.
 [github-repo]: https://github.com/2chevskii/JsTimers
 [github-author-profile]: https://github.com/2chevskii
 [nuget-package-page]: https://www.nuget.org/packages/JsTimers/
+<!--  -->
