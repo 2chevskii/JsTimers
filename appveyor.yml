@@ -34,20 +34,20 @@ image: Visual Studio 2022
 for:
   - only_commits:
       files:
-        - '*'
+        - 'docs/**/*'
     environment:
-      github_access_token:
+      GITHUB_ACCESS_TOKEN:
         secure: oXcOV5MJg+RewNkM3MSV5ZU+gIUZOo8D/4cyW/p5I2ZXD+P2TgTK5ZZfCdQXDG3L
     install:
-      - pwsh: git config --global user.name 2chevskii
-      - pwsh: git config --global user.email prsroman3@gmail.com
-      - pwsh: git config --global credential.helper store
-      - pwsh: Set-Content -Path "$HOME/.git-credentials" -Value "https://$($env:github_access_token):x-oauth-basic@github.com`n" -NoNewline
+      - ps: git config --global user.name 2chevskii
+      - ps: git config --global user.email prsroman3@gmail.com
+      - ps: git config --global credential.helper store
+      - ps: Set-Content -Path "$HOME/.git-credentials" -Value "https://$($env:GITHUB_ACCESS_TOKEN):x-oauth-basic@github.com`n" -NoNewline
     build_script:
-      - pwsh: npm install
-      - pwsh: npm run docs:build
-      - pwsh: cd docs/.vitepress/dist
-      - pwsh: git init
-      - pwsh: git add -A
-      - pwsh: git commit -m 'Deploy docs#$($env:APPVEYOR_BUILD_NUMBER)'
-      - pwsh: git push -f git@github.com:2chevskii/jstimers.git docs:gh-pages
+      - ps: npm install
+      - ps: npm run docs:build
+      - ps: cd docs/.vitepress/dist
+      - ps: git init --initial-branch=master
+      - ps: git add -A
+      - ps: 'git commit -m "Documentation deploy #$($env:APPVEYOR_BUILD_NUMBER)"'
+      - ps: git push -f https://git@github.com:2chevskii/JsTimers.git master:gh-pages
