@@ -45,7 +45,7 @@ for:
       - ps: Set-Content -Path "$HOME/.git-credentials" -Value "https://$($env:GITHUB_ACCESS_TOKEN):x-oauth-basic@github.com`n" -NoNewline
       - pwsh: npm install --no-package-lock # fuck fuck fuck fuck fuck
     build_script:
-      - ps: npm run docs:build
+      - pwsh: npm run docs:build
       - ps: cd docs/.vitepress/dist
       - ps: git init --initial-branch=master
       - ps: git add -A
