@@ -9,9 +9,6 @@ for:
   - only_commits:
       files:
         - 'docs/**/*'
-    branches:
-      only:
-        - master
     install:
       - ps: git config --global user.name 2chevskii
       - ps: git config --global user.email prsroman3@gmail.com
