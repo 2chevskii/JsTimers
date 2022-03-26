@@ -10,6 +10,7 @@
     <Version Condition="'$(CI)' == 'True'">$(Version)-$(APPVEYOR_REPO_BRANCH)+$([System.Int32]::Parse($(APPVEYOR_BUILD_NUMBER)).ToString('X'))</Version>
     <Version Condition="'$(CI)' == 'True' AND '$(APPVEYOR_REPO_TAG)' == 'true'">$(APPVEYOR_REPO_TAG_NAME)</Version>
     <FileVersion Condition="'$(CI)' == 'True'">$(Version.Split('-')[0]).$(APPVEYOR_BUILD_NUMBER)</FileVersion>
+    <DebugType>full</DebugType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
