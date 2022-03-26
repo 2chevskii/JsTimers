@@ -5,7 +5,13 @@ export default defineConfig({
   lang: 'en-US',
   title: 'JsTimers',
   description: 'Simple timer management for .NET',
-  head: [['link', { rel: 'icon', href: '/favicon.png', type: 'image/x-icon' }]],
+  head: [
+    ['link', { rel: 'icon', href: '/favicon.png?', type: 'image/x-icon' }],
+    [
+      'link',
+      { rel: 'shortcut icon', href: '/favicon.png?', type: 'image/x-icon' }
+    ]
+  ],
   themeConfig: {
     sidebar: [
       {
