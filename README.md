@@ -1,4 +1,4 @@
-[![Project logo][logo-local]][docs]
+[![Project logo][logo-github]][docs]
 
 [![Codefactor stats][codefactor-badge]][codefactor-stats]
 [![AppVeyor build status][appveyor-badge]][appveyor-build-status]
@@ -80,6 +80,7 @@ one by one, this might sometimes cause overhead of up to `30ms`,
 therefore it works fine in most cases when you build general purpose software,
 but if you want to build an atomic clock with that, I have bad news for you
 
+[logo-github]: https://github.com/2chevskii/JsTimers/raw/master/assets/graphics/rendered/logo.png
 [logo-local]: assets/graphics/rendered/logo.png
 [icon-local]: assets/graphics/rendered/icon.png
 [codefactor-badge]: https://img.shields.io/codefactor/grade/github/2chevskii/jstimers/master?color=%23f7df1e&logo=codefactor&logoColor=%23f7df1e&style=for-the-badge
