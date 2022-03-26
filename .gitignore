@@ -13,3 +13,7 @@ TestResults/
 
 # 3rd party
 node_modules/
+
+# Caches and logs
+logs/
+package-lock.json
