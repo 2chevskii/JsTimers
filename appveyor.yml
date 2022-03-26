@@ -23,12 +23,7 @@ for:
     test: false
   - only_commits:
       files:
-        - 'JsTimers/**/*'
-        - 'JsTimers.Test/**/*'
-        - 'JsTimers.Tests/**/*'
-        - 'appveyor.yml'
-        - 'Directory.Build.props'
-        - 'JsTimers.sln'
+        - '*'
     install:
       - ps: msbuild -t:restore JsTimers.sln
     build:
