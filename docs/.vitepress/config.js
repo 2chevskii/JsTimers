@@ -12,6 +12,23 @@ export default defineConfig({
     ]
   ],
   themeConfig: {
+    nav: [
+      {
+        link: 'https://github.com/2chevskii/JsTimers',
+        target: '_blank',
+        text: 'GitHub'
+      },
+      {
+        link: 'https://nuget.org/packages/JsTimers',
+        target: '_blank',
+        text: 'NuGet'
+      },
+      {
+        link: 'https://ci.appveyor.com/project/2chevskii/jstimers/builds/43025385',
+        target: '_blank',
+        text: 'Latest stable build (1.0.38)'
+      }
+    ],
     sidebar: [
       {
         text: 'Introduction',
