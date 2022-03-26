@@ -57,6 +57,8 @@ for:
   # - branches:
   #     only:
   #       - master
+install:
+  - ps: msbuild -t:restore JsTimers.sln
 build:
   project: JsTimers.sln
   publish_nuget: true
