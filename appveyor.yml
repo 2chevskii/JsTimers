@@ -6,9 +6,9 @@ environment:
   NUGET_API_KEY:
     secure: 5llcjQ7ZU0MacQj4HoqZdfXFgeY1HV5uUDkjpkOBXI3eYD/ZNfHvDSFBJV1FHbn1
 for:
-  - only_commits:
-      files:
-        - 'docs/**/*'
+  - branches:
+      only:
+        - docs
     install:
       - ps: git config --global user.name 2chevskii
       - ps: git config --global user.email prsroman3@gmail.com
@@ -21,14 +21,9 @@ for:
       - ps: 'git commit -m "Documentation deploy #$($env:APPVEYOR_BUILD_NUMBER)"'
       - pwsh: 'git push -f "https://2chevskii:$($env:GITHUB_ACCESS_TOKEN)@github.com/2chevskii/JsTimers.git" master:gh-pages'
     test: false
-  - only_commits:
-      files:
-        - 'JsTimers/**/*'
-        - 'JsTimers.Test/**/*'
-        - 'JsTimers.Tests/**/*'
-        - 'appveyor.yml'
-        - 'Directory.Build.props'
-        - 'JsTimers.sln'
+  - branches:
+      only:
+        - /(?!docs)/
     install:
       - ps: msbuild -t:restore JsTimers.sln
     build:
