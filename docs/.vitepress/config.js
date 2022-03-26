@@ -10,10 +10,6 @@ export default defineConfig({
       'link',
       { rel: 'icon', href: '/JsTimers/favicon.png', type: 'image/x-icon' }
     ]
-    // [
-    //   'link',
-    //   { rel: 'shortcut icon', href: '/favicon.png?', type: 'image/x-icon' }
-    // ]
   ],
   themeConfig: {
     sidebar: [
