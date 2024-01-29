@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\JsTimers\JsTimers.csproj" />
+    <ProjectReference Include="..\..\src\JsTimers\JsTimers.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,20 @@
+{
+  "name": "@2chevskii/jstimers-docs",
+  "version": "1.0.0",
+  "latestReleaseVersion": "1.0.0",
+  "private": true,
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "docs:dev": "vitepress dev",
+    "docs:build": "vitepress build",
+    "docs:preview": "vitepress preview"
+  },
+  "keywords": [],
+  "author": "2CHEVSKII",
+  "license": "MIT",
+  "devDependencies": {
+    "vitepress": "^1.0.0-rc.40"
+  }
+}

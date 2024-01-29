@@ -24,12 +24,10 @@ using static JsTimers.TimerManager;
 Instantiating a timer is as simple as calling the `TimerManager.SetTimeout` method:
 
 ```cs
-static void Main() {
-  // Creates a timer which will output message to stdout after 1 second
-  TimerManager.SetTimeout(
-    () => Console.WriteLine("Hello from JsTimers!"),
-  1000);
-}
+TimerManager.SetTimeout(
+  () => Console.WriteLine("Hello from JsTimers!"),
+  1000
+);
 ```
 
 ## Cancel the timer
@@ -37,14 +35,9 @@ static void Main() {
 Cancelling timers is also pretty straight-forward:
 
 ```cs
-static void Main() {
-  // Create a timer
-  Timeout timer = TimerManager.SetTimeout(
-    () => {},
-    1000
-  );
-  // Cancel timer's execution
-  TimerManager.ClearTimeout(timer);
-  Debug.Assert(timer.Destroyed == true);
-}
+Timeout timer = TimerManager.SetTimeout(
+  () => ThisWillNotBeCalled(),
+  1000
+);
+TimerManager.ClearTimeout(timer);
 ```

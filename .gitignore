@@ -7,13 +7,16 @@ _ReSharper.Caches/
 obj/
 bin/
 docs/.vitepress/dist/
+docs/.vitepress/cache/
 
 # Test artifacts
 TestResults/
 
 # 3rd party
-node_modules/
+docs/node_modules/
 
 # Caches and logs
 logs/
 package-lock.json
+
+.nuke/temp

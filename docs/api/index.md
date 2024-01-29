@@ -1,0 +1,25 @@
+# API Reference
+
+## JsTimers namespace
+
+- [TimerManager class](./JsTimers/TimerManager)
+  - [OnTimerError](./JsTimers/TimerManager#ontimererror)
+  - [SetTimeout(Action, int)](./JsTimers/TimerManager#settimeoutaction-int)
+  - [SetTimeout(Action, float)](./JsTimers/TimerManager#settimeoutaction-float)
+  - [SetInterval(Action, int)](./JsTimers/TimerManager#setintervalaction-int)
+  - [SetInterval(Action, float)](./JsTimers/TimerManager#setintervalaction-float)
+  - [SetImmediate(Action)](./JsTimers/TimerManager#setimmediateaction)
+  - [ClearTimeout(Timeout)](./JsTimers/TimerManager#cleartimeouttimeout)
+  - [ClearInverval(Timeout)](./JsTimers/TimerManager#clearintervaltimeout)
+  - [ClearImmediate(Immediate)](./JsTimers/TimerManager#clearimmediateimmediate)
+- [Timer class](./JsTimers/Timer)
+  - [Id](./JsTimers/Timer#id)
+  - [Destroyed](./JsTimers/Timer#destroyed)
+  - [OnError](./JsTimers/Timer#onerror)
+  - [Ref](./JsTimers/Timer#ref)
+  - [UnRef](./JsTimers/Timer#unref)
+  - [HasRef](./JsTimers/Timer#hasref)
+- [Timeout class](./JsTimers/Timeout)
+  - [IsInterval](./JsTimers/Timeout#isinterval)
+  - [Refresh](./JsTimers/Timeout#refresh)
+- [Immediate class](./JsTimers/Immediate)

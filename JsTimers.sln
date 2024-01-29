@@ -3,17 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JsTimers", "JsTimers\JsTimers.csproj", "{B56FBFA6-97D3-4275-9E32-BABD76A141BB}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1350EDDC-F36C-4C2E-B89F-85E9AFF4373C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FCE46D33-E2D6-4A13-AAF0-48A7D248C4AF}"
-	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-		.gitignore = .gitignore
-		appveyor.yml = appveyor.yml
-		package.json = package.json
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsTimers", "src\JsTimers\JsTimers.csproj", "{C19C5806-541A-4442-BE5B-9D28BD4E0BD6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JsTimers.Tests", "JsTimers.Tests\JsTimers.Tests.csproj", "{29646D47-12B4-481B-8E36-EBF35A0515AE}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{C2123B03-DB5D-4F3E-A35B-D88B65D7FE63}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsTimers.Tests", "test\JsTimers.Tests\JsTimers.Tests.csproj", "{8B1A43BF-3585-4964-9E49-9F0A337063B1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.csproj", "{3EFBADC6-67FE-46B9-81E5-1FEB7593D032}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,19 +19,25 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B56FBFA6-97D3-4275-9E32-BABD76A141BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B56FBFA6-97D3-4275-9E32-BABD76A141BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B56FBFA6-97D3-4275-9E32-BABD76A141BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B56FBFA6-97D3-4275-9E32-BABD76A141BB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{29646D47-12B4-481B-8E36-EBF35A0515AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{29646D47-12B4-481B-8E36-EBF35A0515AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{29646D47-12B4-481B-8E36-EBF35A0515AE}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{29646D47-12B4-481B-8E36-EBF35A0515AE}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{3EFBADC6-67FE-46B9-81E5-1FEB7593D032}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EFBADC6-67FE-46B9-81E5-1FEB7593D032}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C19C5806-541A-4442-BE5B-9D28BD4E0BD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C19C5806-541A-4442-BE5B-9D28BD4E0BD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C19C5806-541A-4442-BE5B-9D28BD4E0BD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C19C5806-541A-4442-BE5B-9D28BD4E0BD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B1A43BF-3585-4964-9E49-9F0A337063B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B1A43BF-3585-4964-9E49-9F0A337063B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B1A43BF-3585-4964-9E49-9F0A337063B1}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B1A43BF-3585-4964-9E49-9F0A337063B1}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {60C13354-24FE-43CE-9D1F-D8569AC1E225}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C19C5806-541A-4442-BE5B-9D28BD4E0BD6} = {1350EDDC-F36C-4C2E-B89F-85E9AFF4373C}
+		{8B1A43BF-3585-4964-9E49-9F0A337063B1} = {C2123B03-DB5D-4F3E-A35B-D88B65D7FE63}
 	EndGlobalSection
 EndGlobal
