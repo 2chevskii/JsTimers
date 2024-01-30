@@ -1,4 +1,5 @@
 import { defineConfig } from "vitepress";
+import pkg from "../package.json";
 
 export default defineConfig({
   title: "JsTimers",
@@ -95,5 +96,9 @@ export default defineConfig({
       { icon: "github", link: "https://github.com/2chevskii/JsTimers" },
     ],
     search: { provider: "local" },
+
+    footer: {
+      message: `Built with <a href="https://vitepress.dev">VitePress</a> | <code>API version ${pkg.version}</code><br/>Released under the MIT license. All rights reserved`,
+    },
   },
 });

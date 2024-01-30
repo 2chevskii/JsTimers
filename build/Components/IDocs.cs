@@ -1,12 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
+using NuGet.Versioning;
 using Nuke.Common;
 using Nuke.Common.IO;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.Npm;
+using Nuke.Common.Utilities;
+using Serilog;
 
-interface IDocs : INukeBuild, IHazArtifacts
+interface IDocs : INukeBuild, IHazArtifacts, IHazVersion
 {
     AbsolutePath DocsDirectory => RootDirectory / "docs";
+    AbsolutePath DocsPackageJson => DocsDirectory / "package.json";
+
+    [LatestGitHubRelease("2chevskii/JsTimers", TrimPrefix = true)]
+    string GitHubLatestReleaseVersion => TryGetValue(() => GitHubLatestReleaseVersion);
 
     Target Docs => _ => _.DependsOn(DocsCompile, DocsCopy);
 
@@ -21,7 +29,7 @@ interface IDocs : INukeBuild, IHazArtifacts
 
     Target DocsDev =>
         _ =>
-            _.DependsOn(DocsRestore)
+            _.DependsOn(DocsRestore, PatchPackageJsonVersionProps)
                 .Executes(
                     () =>
                         NpmTasks.NpmRun(settings =>
@@ -33,7 +41,7 @@ interface IDocs : INukeBuild, IHazArtifacts
 
     Target DocsCompile =>
         _ =>
-            _.DependsOn(DocsRestore)
+            _.DependsOn(DocsRestore, PatchPackageJsonVersionProps)
                 .Executes(
                     () =>
                         NpmTasks.NpmRun(settings =>
@@ -75,4 +83,20 @@ interface IDocs : INukeBuild, IHazArtifacts
                 () => (DocsDirectory / ".vitepress/dist").DeleteDirectory(),
                 () => (ArtifactDirectories.Docs / "dist").DeleteDirectory()
             );
+
+    Target PatchPackageJsonVersionProps =>
+        _ =>
+            _.After(DocsRestore)
+                .Executes(() =>
+                {
+                    var pkg = DocsPackageJson.ReadJson<Dictionary<string, object>>();
+                    pkg["version"] = Version.SemVer;
+                    Log.Debug("Setting package.json 'version' to {Version}", Version.SemVer);
+                    pkg["latestReleaseVersion"] = GitHubLatestReleaseVersion;
+                    Log.Debug(
+                        "Setting package.json 'latestReleaseVersion' to {Version}",
+                        GitHubLatestReleaseVersion
+                    );
+                    DocsPackageJson.WriteJson(pkg);
+                });
 }

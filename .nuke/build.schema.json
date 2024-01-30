@@ -18,6 +18,9 @@
           "type": "boolean",
           "description": "Indicates to continue a previously failed build attempt"
         },
+        "CopyLibs": {
+          "type": "boolean"
+        },
         "Help": {
           "type": "boolean",
           "description": "Shows the help text for this build assembly"
@@ -80,18 +83,21 @@
               "Compile",
               "CompileSrc",
               "CompileTests",
+              "CopyLibsOutput",
               "Coverage",
               "CoverageCollect",
               "CoverageCreateReport",
+              "Docs",
+              "DocsClean",
               "DocsCompile",
+              "DocsCopy",
               "DocsDev",
-              "DocsGzip",
               "DocsPreview",
               "DocsRestore",
               "Pack",
+              "PatchPackageJsonVersionProps",
               "Restore",
-              "Test",
-              "ZipLibsOutput"
+              "Test"
             ]
           }
         },
@@ -110,18 +116,21 @@
               "Compile",
               "CompileSrc",
               "CompileTests",
+              "CopyLibsOutput",
               "Coverage",
               "CoverageCollect",
               "CoverageCreateReport",
+              "Docs",
+              "DocsClean",
               "DocsCompile",
+              "DocsCopy",
               "DocsDev",
-              "DocsGzip",
               "DocsPreview",
               "DocsRestore",
               "Pack",
+              "PatchPackageJsonVersionProps",
               "Restore",
-              "Test",
-              "ZipLibsOutput"
+              "Test"
             ]
           }
         },
@@ -134,9 +143,6 @@
             "Quiet",
             "Verbose"
           ]
-        },
-        "ZipLibs": {
-          "type": "boolean"
         }
       }
     }

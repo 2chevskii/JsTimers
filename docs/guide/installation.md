@@ -68,7 +68,7 @@ which you use for project dependencies like this
 
 ```xml
 <ItemGroup>
-  <Reference Include="$(ReferencesDir)JsTimers.dll" />
+  <Reference Include="$(YourReferenceDir)JsTimers.dll" />
 </ItemGroup>
 ```
 
