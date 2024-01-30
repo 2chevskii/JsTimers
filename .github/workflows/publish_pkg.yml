@@ -1,0 +1,23 @@
+on:
+  release:
+    types: published
+jobs:
+  push:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: ✅ Checkout repository
+        uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: 🔽 Download release assets
+        run: ./build.sh download-release-assets
+      - name: 🚚 Push packages to NuGet feed (nuget.org)
+        run: ./build.sh nuget-push --nuget-feed 'https://api.nuget.org/v3/index.json'
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+      - name: 🚚 Push packages to NuGet feed (github.com)
+        run: ./build.sh nuget-push --nuget-feed 'https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json'
+        env:
+          NUGET_API_KEY: ${{ secrets.GITHUB_TOKEN }}
