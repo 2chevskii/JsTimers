@@ -33,7 +33,7 @@ jobs:
         uses: actions/checkout@v4
         with: { fetch-depth: 0 }
       - name: 🛠️ Run release build
-        run: ./build.sh compile-src pack --configuration Release --copy-libs-output
+        run: ./build.sh compile-src pack --configuration Release --zip-libs
       - name: 💾 Upload build artifacts 1/2
         uses: actions/upload-artifact@v4
         with:
