@@ -1,0 +1,27 @@
+on: push # change this to tag only push
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: ✅ Checkout repository
+        uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: 🛠️ Generate documentation
+        run: ./build.sh docs
+      - name: 💾 Upload website dist to artifact storage
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: artifacts/docs/dist/
+  deploy:
+    runs-on: ubuntu-22.04
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: 🚚 Deploy documentation website
+        uses: actions/deploy-pages@v4
+        id: deployment

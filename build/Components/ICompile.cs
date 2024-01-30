@@ -3,11 +3,12 @@ using Nuke.Common;
 using Nuke.Common.IO;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
+using Octokit;
 
 interface ICompile : IRestore, IHazVersion, IHazConfiguration, IHazArtifacts
 {
     [Parameter, Required]
-    bool ZipLibs => TryGetValue<bool?>(() => ZipLibs).GetValueOrDefault();
+    bool CopyLibs => TryGetValue<bool?>(() => CopyLibs).GetValueOrDefault();
 
     Target CompileSrc =>
         _ =>
@@ -31,17 +32,19 @@ interface ICompile : IRestore, IHazVersion, IHazConfiguration, IHazArtifacts
 
     Target Compile => _ => _.DependsOn(CompileSrc, CompileTests);
 
-    Target ZipLibsOutput =>
+    Target CopyLibsOutput =>
         _ =>
             _.Unlisted()
                 .DependsOn(CompileSrc)
                 .TriggeredBy(CompileSrc)
-                .OnlyWhenStatic(() => ZipLibs)
+                .OnlyWhenStatic(() => CopyLibs)
                 .Executes(
                     () =>
-                        (SrcProject.Directory / "bin" / Configuration / "netstandard2.0").ZipTo(
-                            ArtifactDirectories.Libraries / "netstandard2.0.zip",
-                            fileMode: FileMode.Create
+                        FileSystemTasks.CopyDirectoryRecursively(
+                            SrcProject.Directory / "bin" / Configuration / "netstandard2.0",
+                            ArtifactDirectories.Libraries / "netstandard2.0",
+                            DirectoryExistsPolicy.Merge,
+                            FileExistsPolicy.Overwrite
                         )
                 );
 

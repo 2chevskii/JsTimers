@@ -4,9 +4,11 @@ using Nuke.Common.IO;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.Npm;
 
-interface IDocs : INukeBuild
+interface IDocs : INukeBuild, IHazArtifacts
 {
     AbsolutePath DocsDirectory => RootDirectory / "docs";
+
+    Target Docs => _ => _.DependsOn(DocsCompile, DocsCopy);
 
     Target DocsRestore =>
         _ =>
@@ -53,6 +55,24 @@ interface IDocs : INukeBuild
                         )
                 );
 
-    Target DocsGzip =>
-        _ => _.DependsOn(DocsCompile).Executes(() => throw new NotImplementedException());
+    Target DocsCopy =>
+        _ =>
+            _.DependsOn(DocsCompile)
+                .Executes(
+                    () =>
+                        FileSystemTasks.CopyDirectoryRecursively(
+                            DocsDirectory / ".vitepress/dist",
+                            ArtifactDirectories.Docs / "dist",
+                            DirectoryExistsPolicy.Merge,
+                            FileExistsPolicy.Overwrite
+                        )
+                )
+                .Unlisted();
+
+    Target DocsClean =>
+        _ =>
+            _.Executes(
+                () => (DocsDirectory / ".vitepress/dist").DeleteDirectory(),
+                () => (ArtifactDirectories.Docs / "dist").DeleteDirectory()
+            );
 }
