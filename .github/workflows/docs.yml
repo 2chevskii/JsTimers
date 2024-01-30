@@ -1,4 +1,6 @@
-on: push # change this to tag only push
+on:
+  push:
+    tags: v*.*
 jobs:
   build:
     runs-on: ubuntu-22.04
