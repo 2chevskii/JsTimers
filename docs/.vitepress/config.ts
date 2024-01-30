@@ -3,13 +3,13 @@ import { defineConfig } from "vitepress";
 export default defineConfig({
   title: "JsTimers",
   description: "JsTimers documentation",
-  base: "/jstimers/",
+  base: "/JsTimers/",
   head: [
     [
       "link",
       {
         rel: "icon",
-        href: "/jstimers/favicon.ico",
+        href: "/JsTimers/favicon.ico",
       },
     ],
   ],
