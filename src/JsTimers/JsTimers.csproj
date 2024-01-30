@@ -2,24 +2,26 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Package metadata">
+    <Description>JavaScript style timer API for .NET</Description>
+    <PackageTags>timers api utility</PackageTags>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>icon.png</PackageIcon>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Debug">
     <IncludeSymbols>true</IncludeSymbols>
-    <!--Version properties-->
-    <Version>1.0.39</Version>
-    <Version Condition="'$(CI)' == 'True'">$(Version)-$(APPVEYOR_REPO_BRANCH)+$([System.Int32]::Parse($(APPVEYOR_BUILD_NUMBER)).ToString('X'))</Version>
-    <Version Condition="'$(CI)' == 'True' AND '$(APPVEYOR_REPO_TAG)' == 'true'">$(APPVEYOR_REPO_TAG_NAME)</Version>
-    <FileVersion Condition="'$(CI)' == 'True'">$(Version.Split('-')[0]).$(APPVEYOR_BUILD_NUMBER)</FileVersion>
-    <DebugType>full</DebugType>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <DebugType>portable</DebugType>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>DEBUG</DefineConstants>
-    <Optimize>false</Optimize>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <Optimize>true</Optimize>
-  </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="\" Visible="false"/>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" Visible="false"/>
+    <None Include="..\..\assets\graphics\rendered\icon.png" Pack="true" PackagePath="\" Visible="false"/>
+  </ItemGroup>
 
 </Project>

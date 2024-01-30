@@ -18,9 +18,6 @@
           "type": "boolean",
           "description": "Indicates to continue a previously failed build attempt"
         },
-        "CopyLibsOutput": {
-          "type": "boolean"
-        },
         "Help": {
           "type": "boolean",
           "description": "Shows the help text for this build assembly"
@@ -45,6 +42,9 @@
             "VisualStudio",
             "VSCode"
           ]
+        },
+        "HtmlTestResults": {
+          "type": "boolean"
         },
         "NoLogo": {
           "type": "boolean",
@@ -80,13 +80,18 @@
               "Compile",
               "CompileSrc",
               "CompileTests",
-              "CopyLibrariesOutput",
+              "Coverage",
+              "CoverageCollect",
+              "CoverageCreateReport",
               "DocsCompile",
               "DocsDev",
               "DocsGzip",
               "DocsPreview",
               "DocsRestore",
-              "Restore"
+              "Pack",
+              "Restore",
+              "Test",
+              "ZipLibsOutput"
             ]
           }
         },
@@ -105,13 +110,18 @@
               "Compile",
               "CompileSrc",
               "CompileTests",
-              "CopyLibrariesOutput",
+              "Coverage",
+              "CoverageCollect",
+              "CoverageCreateReport",
               "DocsCompile",
               "DocsDev",
               "DocsGzip",
               "DocsPreview",
               "DocsRestore",
-              "Restore"
+              "Pack",
+              "Restore",
+              "Test",
+              "ZipLibsOutput"
             ]
           }
         },
@@ -124,6 +134,9 @@
             "Quiet",
             "Verbose"
           ]
+        },
+        "ZipLibs": {
+          "type": "boolean"
         }
       }
     }

@@ -12,6 +12,7 @@
 **/*/obj/
 **/*/bin/
 docs/.vitepress/dist/
+/artifacts/
 
 # Test artifacts
 **/*/TestResults/

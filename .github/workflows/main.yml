@@ -1,0 +1,46 @@
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: ✅ Checkout repository
+        uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: 🧪 Run unit tests
+        run: ./build.sh test --html-test-results
+      - name: 📝 Collect coverage report
+        run: ./build.sh coverage
+      - name: 💾 Upload test results to artifact storage
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: artifacts/test_results/test-results.*.html
+      - name: 💾 Upload coverage reports (cobertura xml format)
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-cobertura
+          path: artifacts/test_results/coverage/coverage.*.xml
+      - name: 💾 Upload coverage reports (html format)
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-html
+          path: artifacts/test_results/coverage/report.*
+  build:
+    runs-on: ubuntu-22.04
+    needs: test
+    steps:
+      - name: ✅ Checkout repository
+        uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: 🛠️ Run release build
+        run: ./build.sh compile-src pack --configuration Release --copy-libs-output
+      - name: 💾 Upload build artifacts 1/2
+        uses: actions/upload-artifact@v4
+        with:
+          name: packages
+          path: artifacts/pkg/*.*nupkg
+      - name: 💾 Upload build artifacts 2/2
+        uses: actions/upload-artifact@v4
+        with:
+          name: libraries
+          path: artifacts/lib/*.zip
