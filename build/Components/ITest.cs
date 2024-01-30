@@ -40,7 +40,9 @@ interface ITest : ICompile
                                         / $"bin/{Configuration}/{TestProject.GetTargetFrameworks()!.First()}/JsTimers.Tests.dll"
                                 )
                                 .SetTarget("dotnet")
-                                .SetTargetArgs($"test {TestProject} --no-build --configuration {Configuration}")
+                                .SetTargetArgs(
+                                    $"test {TestProject} --no-build --configuration {Configuration}"
+                                )
                                 .SetInclude("[JsTimers]*")
                                 .SetOutput(ArtifactDirectories.Coverage / "coverage.JsTimers.xml")
                         )
@@ -61,7 +63,11 @@ interface ITest : ICompile
                 );
 
     Configure<DotNetTestSettings> TestSettingsBase =>
-        settings => settings.EnableNoBuild().SetConfiguration(Configuration);
+        settings =>
+            settings
+                .EnableNoBuild()
+                .SetConfiguration(Configuration)
+                .SetResultsDirectory(ArtifactDirectories.TestResults);
 
     Configure<DotNetTestSettings> TestSettingsLoggers =>
         settings =>
